@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         });
         colorListElems = new ArrayList<>();
         for(int i = 0; i < 10; ++i){
-            colorListElems.add(new ColorListElem("ggg", i, getResources().getColor(R.color.color_red)));
+            colorListElems.add(new ColorListElem());
         }
         recyclerView = findViewById(R.id.colors_list_recycler);
         colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(colorListElems);

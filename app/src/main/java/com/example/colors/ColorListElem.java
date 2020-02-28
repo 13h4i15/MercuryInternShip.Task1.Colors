@@ -1,37 +1,37 @@
 package com.example.colors;
 
 class ColorListElem {
-    private String text;
-    private int position;
-    private int color;
 
-    public ColorListElem(String text, int position, int color) {
-        this.text = text;
-        this.position = position;
-        this.color = color;
+    public ColorListElem() {
     }
 
-    public String getText() {
-        return text;
+    public enum ItemColorState{
+        RED(R.color.color_red),
+        ORANGE(R.color.color_orange),
+        YELLOW(R.color.color_yellow),
+        GREEN(R.color.color_green),
+        BLUE(R.color.color_blue),
+        NAVY_BLUE(R.color.color_navy_blue),
+        LILAC(R.color.color_lilac),
+        BLANK(R.color.color_transparent);
+
+        private int colorId;
+
+        ItemColorState(int colorId) {
+            this.colorId = colorId;
+        }
+
+        public int getColorId() {
+            return colorId;
+        }
+
+        static public int getColorStatesSize(){
+            return ItemColorState.values().length;
+        }
+        public static int getColorByPosition(int position){
+            return ItemColorState.values()[position % getColorStatesSize()].getColorId();
+        }
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
 
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    public int getColor() {
-        return color;
-    }
-
-    public void setColor(int color) {
-        this.color = color;
-    }
 }

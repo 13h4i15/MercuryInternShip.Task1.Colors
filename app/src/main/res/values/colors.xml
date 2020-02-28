@@ -11,4 +11,5 @@
     <color name="color_blue">#00FFFF</color>
     <color name="color_navy_blue">#0000FF</color>
     <color name="color_lilac">#4B0082</color>
+    <color name="color_transparent">#00000000</color>
 </resources>
