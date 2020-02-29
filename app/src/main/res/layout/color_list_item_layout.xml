@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="wrap_content"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/colors_list_item_body"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp"
     android:focusableInTouchMode="true"
-    android:background="@drawable/color_list_states">
+    android:background="@drawable/color_list_item_background_states">
     <TextView
         android:id="@+id/colors_list_item_text"
-        android:layout_width="match_parent"
-        android:duplicateParentState="true"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:duplicateParentState="true"
         android:text="fffffffffffffffff"
-        android:textColor="@color/color_list_text_states"/>
+        android:textColor="@color/color_list_item_text_states"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="100"
+        android:background="@null"/>
+    <ImageView
+        android:id="@+id/colors_list_item_circle"
+        android:layout_weight="1"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:backgroundTint="@color/color_blue"
+        android:background="@drawable/color_list_circle_item_shape"/>
 </LinearLayout>

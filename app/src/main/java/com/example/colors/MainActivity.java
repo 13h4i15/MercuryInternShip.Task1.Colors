@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         colorListElems = new ArrayList<>();
-        for(int i = 0; i < 10; ++i){
+        for(int i = 0; i < 100; ++i){
             colorListElems.add(new ColorListElem());
         }
         recyclerView = findViewById(R.id.colors_list_recycler);

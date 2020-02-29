@@ -25,9 +25,10 @@ class ColorListElem {
             return colorId;
         }
 
-        static public int getColorStatesSize(){
+        static private int getColorStatesSize(){
             return ItemColorState.values().length;
         }
+
         public static int getColorByPosition(int position){
             return ItemColorState.values()[position % getColorStatesSize()].getColorId();
         }
