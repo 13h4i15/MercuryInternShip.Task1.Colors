@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder>{
     private ArrayList<ColorListElem> colorListElems;
-    private int focusedPosition = -1;
+    private int focusedPosition;
     private ViewGroup parent;
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder{
@@ -33,8 +33,13 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         return focusedPosition;
     }
 
-    public ColorsListRecyclerAdapter(ArrayList<ColorListElem> colorListElems) {
+    public void setFocusedPosition(int position){
+        this.focusedPosition = position;
+    }
+
+    public ColorsListRecyclerAdapter(ArrayList<ColorListElem> colorListElems, int focusedPosition) {
         this.colorListElems = colorListElems;
+        this.focusedPosition = focusedPosition;
     }
 
     @Override
@@ -50,7 +55,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
         final RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
 
-        view.setOnClickListener( v -> { });  // иначе не фокусится
+        view.setOnClickListener( v -> { });  // иначе не фокусится, нужна нажималка
 
         view.setOnFocusChangeListener( (v, isFocused) ->{
             if(isFocused){
