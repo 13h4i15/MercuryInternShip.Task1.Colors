@@ -33,10 +33,6 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         return focusedPosition;
     }
 
-    public void setFocusedPosition(int position){
-        this.focusedPosition = position;
-    }
-
     public ColorsListRecyclerAdapter(ArrayList<ColorListElem> colorListElems, int focusedPosition) {
         this.colorListElems = colorListElems;
         this.focusedPosition = focusedPosition;
