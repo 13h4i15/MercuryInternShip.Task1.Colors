@@ -55,7 +55,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         colorListElems.get(position).setPosition(position);
-        holder.textView.setText("Item " + position);//todo
+        holder.textView.setText("Item " + position);
         holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, ColorListElem.ItemColorState.getColorByPosition(position))));
     }
 
