@@ -1,13 +1,18 @@
 package com.example.colors;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -18,11 +23,11 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder{
         public TextView textView;
-        public View image;
+        public ImageView image;
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.colors_list_item_text);
-            //image = itemView.findViewById(R.id.colors_list_item_image);
+            image = itemView.findViewById(R.id.colors_list_item_circle);
         }
 
     }
@@ -49,8 +54,9 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-        holder.textView.setText("Item" + position);//todo
-        //holder.image.setBackgroundColor(colorListElems.get(position).getColor());
+        colorListElems.get(position).setPosition(position);
+        holder.textView.setText("Item " + position);//todo
+        holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, ColorListElem.ItemColorState.getColorByPosition(position))));
     }
 
 

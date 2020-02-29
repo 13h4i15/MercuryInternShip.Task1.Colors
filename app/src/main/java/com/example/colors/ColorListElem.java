@@ -1,8 +1,16 @@
 package com.example.colors;
 
 class ColorListElem {
-
+    private int position;
     public ColorListElem() {
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     public enum ItemColorState{
