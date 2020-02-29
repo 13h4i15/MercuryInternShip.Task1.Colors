@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -20,6 +19,7 @@ import java.util.ArrayList;
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder>{
     private ArrayList<ColorListElem> colorListElems;
     private Context context;
+    private int focusedPosition = -1;
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder{
         public TextView textView;
@@ -45,19 +45,32 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.color_list_item_layout, parent, false);
+
         context = parent.getContext();
+
         final RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
-        view.setOnClickListener( v -> { });
-        //view.setOnFocusChangeListener( (v, isFocused) ->{ });
+
+        view.setOnClickListener( v -> { });  // иначе не фокусится
+
+        view.setOnFocusChangeListener( (v, isFocused) ->{
+            if(isFocused){
+                focusedPosition = recyclerViewHolder.getLayoutPosition();
+            }
+        });
+
         return recyclerViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-        colorListElems.get(position).setPosition(position);
-        holder.textView.setText("Item " + position);
+
+        String text = context.getText(R.string.list_item_text_pattern).toString() + " " + position;
+        holder.textView.setText(text);
+
         holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, ColorListElem.ItemColorState.getColorByPosition(position))));
     }
 
-
+    public int getFocusedPosition(){
+        return focusedPosition;
+    }
 }

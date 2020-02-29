@@ -1,17 +1,8 @@
 package com.example.colors;
 
 class ColorListElem {
-    private int position;
-    public ColorListElem() {
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    public int getPosition() {
-        return position;
-    }
+    // Оставлено для выразительности и наличия не задания 1, а 1.1
+    // Думаю тут будут какие-то уникальные элементы, которые нужно сохранять.
 
     public enum ItemColorState{
         RED(R.color.color_red),
@@ -33,7 +24,7 @@ class ColorListElem {
             return colorId;
         }
 
-        static private int getColorStatesSize(){
+        private static int getColorStatesSize(){
             return ItemColorState.values().length;
         }
 

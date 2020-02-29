@@ -12,4 +12,6 @@
     <color name="color_navy_blue">#0000FF</color>
     <color name="color_lilac">#4B0082</color>
     <color name="color_transparent">#00000000</color>
+    <color name="color_persian_blue">#6600FF</color>
+    <color name="color_navy_persian_blue">#5200CC</color>
 </resources>
