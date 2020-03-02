@@ -1,4 +1,4 @@
-package com.example.colors;
+package com.internship.colors;
 
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;

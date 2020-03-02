@@ -1,4 +1,4 @@
-package com.example.colors;
+package com.internship.colors;
 
 class ColorListElem {
     // made for expressiveness and future update.

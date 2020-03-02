@@ -1,4 +1,4 @@
-package com.example.colors;
+package com.internship.colors;
 
 import android.os.Bundle;
 
