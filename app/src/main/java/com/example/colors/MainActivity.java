@@ -32,12 +32,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         colorListElems = new ArrayList<>();
-        for(int i = 0; i < 50; ++i){
+        for (int i = 0; i < 50; ++i) {
             colorListElems.add(new ColorListElem());
         }
 
         recyclerView = findViewById(R.id.colors_list_recycler);
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             focusedPosition = savedInstanceState.getInt(POSITION_INDEX);
         }
         colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(colorListElems, focusedPosition);
@@ -49,14 +49,13 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(v -> {
             focusedPosition = colorsListRecyclerAdapter.getFocusedPosition();
             String text;
-            if(focusedPosition == -1){
+            if (focusedPosition == -1) {
                 text = this.getText(R.string.fab_snackbar_message_text_unclicked).toString();
-            }else {
+            } else {
                 text = this.getText(R.string.fab_snackbar_message_text_pattern).toString() + " " + focusedPosition;
             }
             Snackbar.make(v, text, Snackbar.LENGTH_SHORT).show();
         });
-
     }
 
     @Override

@@ -13,23 +13,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder>{
+class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
     private ArrayList<ColorListElem> colorListElems;
     private int focusedPosition;
     private ViewGroup parent;
 
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder{
+    public class RecyclerViewHolder extends RecyclerView.ViewHolder {
         public TextView textView;
         public ImageView image;
+
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.colors_list_item_text);
             image = itemView.findViewById(R.id.colors_list_item_circle);
         }
-
     }
 
-    public int getFocusedPosition(){
+    public int getFocusedPosition() {
         return focusedPosition;
     }
 
@@ -51,14 +51,14 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
         final RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
 
-        view.setOnClickListener( v -> { });  // иначе не фокусится, нужна нажималка
+        view.setOnClickListener(v -> {  // need any action for focusability
+        });
 
-        view.setOnFocusChangeListener( (v, isFocused) ->{
-            if(isFocused){
+        view.setOnFocusChangeListener((v, isFocused) -> {
+            if (isFocused) {
                 focusedPosition = recyclerViewHolder.getLayoutPosition();
             }
         });
-
         return recyclerViewHolder;
     }
 
@@ -67,10 +67,8 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         String text = parent.getContext().getText(R.string.list_item_text_pattern).toString() + " " + position;
         holder.textView.setText(text);
         holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(parent.getContext(), ColorListElem.ItemColorState.getColorByPosition(position))));
-        if(position == getFocusedPosition()){
+        if (position == getFocusedPosition()) {
             holder.itemView.requestFocus();
         }
     }
-
-
 }
