@@ -16,11 +16,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
 
-    private RecyclerView recyclerView;
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
-    private ArrayList<ColorListElem> colorListElems;
-    private FloatingActionButton fab;
-    private Toolbar toolbar;
     private int focusedPosition = -1;
 
     @Override
@@ -28,15 +24,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        colorListElems = new ArrayList<>();
+        ArrayList<ColorListElem> colorListElems = new ArrayList<>();
         for (int i = 0; i < 50; ++i) {
             colorListElems.add(new ColorListElem());
         }
 
-        recyclerView = findViewById(R.id.colors_list_recycler);
+        RecyclerView recyclerView = findViewById(R.id.colors_list_recycler);
         if (savedInstanceState != null) {
             focusedPosition = savedInstanceState.getInt(POSITION_INDEX);
         }
@@ -45,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(colorsListRecyclerAdapter);
 
 
-        fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             focusedPosition = colorsListRecyclerAdapter.getFocusedPosition();
             String text;
