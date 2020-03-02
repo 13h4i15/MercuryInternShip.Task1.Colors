@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
-    private ArrayList<ColorListElem> colorListElems;
+    private final ArrayList<ColorListElem> colorListElems;
     private int focusedPosition;
     private ViewGroup parent;
 
@@ -30,9 +30,6 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.color_list_item_layout, parent, false);
 
         final RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
-
-        view.setOnClickListener(v -> {  // need any action for focusability
-        });
 
         view.setOnFocusChangeListener((v, isFocused) -> {
             if (isFocused) {

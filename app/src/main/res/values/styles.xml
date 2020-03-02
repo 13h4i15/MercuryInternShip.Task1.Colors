@@ -25,6 +25,8 @@
         <item name="android:background">@drawable/color_list_item_background_states</item>
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:textColor">@color/list_item_text_states</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="color_list_layout_TextView_style">
