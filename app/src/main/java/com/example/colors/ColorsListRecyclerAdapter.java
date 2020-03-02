@@ -18,16 +18,6 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
     private int focusedPosition;
     private ViewGroup parent;
 
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView;
-        public ImageView image;
-
-        public RecyclerViewHolder(@NonNull View itemView) {
-            super(itemView);
-            textView = itemView.findViewById(R.id.colors_list_item_text);
-            image = itemView.findViewById(R.id.colors_list_item_circle);
-        }
-    }
 
     public int getFocusedPosition() {
         return focusedPosition;
@@ -69,6 +59,17 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(parent.getContext(), ColorListElem.ItemColorState.getColorByPosition(position))));
         if (position == getFocusedPosition()) {
             holder.itemView.requestFocus();
+        }
+    }
+
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
+        public TextView textView;
+        public ImageView image;
+
+        public RecyclerViewHolder(@NonNull View itemView) {
+            super(itemView);
+            textView = itemView.findViewById(R.id.colors_list_item_text);
+            image = itemView.findViewById(R.id.colors_list_item_circle);
         }
     }
 }
