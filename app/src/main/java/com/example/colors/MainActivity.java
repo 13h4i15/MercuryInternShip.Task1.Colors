@@ -3,7 +3,6 @@ package com.example.colors;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
