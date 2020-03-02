@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
@@ -30,8 +32,13 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         final RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
 
         view.setOnFocusChangeListener((v, isFocused) -> {
-            if (isFocused) {
+            if (isFocused && focusedPosition != recyclerViewHolder.getLayoutPosition()) {
+                // Without second condition it tries to create Snackbar again when you change app state.
+                // Because of this it crashes app, it tries to create message earlier than parent context is created.
+                // We can fix it with app context, but it will be a wrong behavior.
                 focusedPosition = recyclerViewHolder.getLayoutPosition();
+                String text = parent.getContext().getString(R.string.fab_snackbar_message_text_pattern, focusedPosition);
+                Snackbar.make(v, text, Snackbar.LENGTH_SHORT).show();
             }
         });
         return recyclerViewHolder;

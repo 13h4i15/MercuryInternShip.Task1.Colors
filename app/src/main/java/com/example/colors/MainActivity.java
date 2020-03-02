@@ -42,16 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
-            focusedPosition = colorsListRecyclerAdapter.getFocusedPosition();
-            String text;
-            if (focusedPosition == -1) {
-                text = this.getText(R.string.fab_snackbar_message_text_unclicked).toString();
-            } else {
-                text = this.getText(R.string.fab_snackbar_message_text_pattern).toString() + " " + focusedPosition;
-            }
-            Snackbar.make(v, text, Snackbar.LENGTH_SHORT).show();
-        });
+        fab.hide();
+        /*fab.setOnClickListener(v -> {
+
+        });*/
     }
 
     @Override
