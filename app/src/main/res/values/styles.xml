@@ -17,7 +17,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="color_list_layout_style">
+    <style name="ColorList">
         <item name="android:paddingStart">@dimen/color_list_horizontal_padding</item>
         <item name="android:paddingEnd">@dimen/color_list_horizontal_padding</item>
         <item name="android:paddingTop">@dimen/color_list_vertical_padding</item>
@@ -29,32 +29,32 @@
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="color_list_layout_TextView_style">
+    <style name="ColorListTextView">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:duplicateParentState">true</item>
     </style>
 
-    <style name="color_list_layout_View_style">
+    <style name="ColorListView">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:background">@null</item>
     </style>
 
-    <style name="color_list_layout_circle_style">
+    <style name="ColorListCircle">
         <item name="android:layout_height">@dimen/color_list_circle_size</item>
         <item name="android:layout_width">@dimen/color_list_circle_size</item>
         <item name="android:background">@drawable/color_list_circle_item_shape</item>
     </style>
 
-    <style name="main_activity_layout_toolbar_style">
+    <style name="MainActivityToolbar">
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:background">?attr/colorPrimary</item>
     </style>
 
-    <style name="main_activity_layout_fab_style">
+    <style name="MainActivityFab">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_gravity">bottom|end</item>

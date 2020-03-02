@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:theme="@style/color_list_layout_style">
+    android:theme="@style/ColorList">
     <TextView
         android:id="@+id/colors_list_item_text"
-        style="@style/color_list_layout_TextView_style"/>
+        style="@style/ColorListTextView"/>
     <View
-        style="@style/color_list_layout_TextView_style"
+        style="@style/ColorListTextView"
         android:layout_weight="100"/>
     <ImageView
         android:id="@+id/colors_list_item_circle"
-        style="@style/color_list_layout_circle_style"
+        style="@style/ColorListCircle"
         android:layout_weight="1" />
 </LinearLayout>
