@@ -9,8 +9,8 @@
         android:id="@+id/colors_list_item_text"
         style="@style/color_list_layout_TextView_style"/>
     <View
-        android:layout_weight="100"
-        style="@style/color_list_layout_TextView_style" />
+        style="@style/color_list_layout_TextView_style"
+        android:layout_weight="100"/>
     <ImageView
         android:id="@+id/colors_list_item_circle"
         style="@style/color_list_layout_circle_style"
