@@ -23,5 +23,4 @@
         android:id="@+id/fab"
         app:srcCompat="@android:drawable/ic_input_add"
         style="@style/main_activity_layout_fab_style"/>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

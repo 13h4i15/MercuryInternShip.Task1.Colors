@@ -4,5 +4,4 @@
         android:state_focused="true">
         <color android:color="@android:color/tertiary_text_light"/>
     </item>
-    
 </selector>
