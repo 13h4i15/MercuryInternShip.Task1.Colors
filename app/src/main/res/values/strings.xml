@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Colors</string>
-    <string name="list_item_text_pattern">Item</string>
+    <string name="list_item_text_pattern">Item %d</string>
     <string name="fab_snackbar_message_text_pattern">You clicked item </string>
     <string name="fab_snackbar_message_text_unclicked">You didn\'t choose any item</string>
 </resources>

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
     private final ArrayList<ColorListElem> colorListElems;
     private int focusedPosition;
-    private ViewGroup parent;
 
     public ColorsListRecyclerAdapter(ArrayList<ColorListElem> colorListElems, int focusedPosition) {
         this.colorListElems = colorListElems;
@@ -26,7 +25,6 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        this.parent = parent;
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.color_list_item_layout, parent, false);
 
         final RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
@@ -41,9 +39,9 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-        String text = parent.getContext().getText(R.string.list_item_text_pattern).toString() + " " + position;
+        String text = holder.textView.getContext().getString(R.string.list_item_text_pattern, position);
         holder.textView.setText(text);
-        holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(parent.getContext(), ColorListElem.ItemColorState.getColorByPosition(position))));
+        holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.image.getContext(), ColorListElem.ItemColorState.getColorByPosition(position))));
         if (position == getFocusedPosition()) {
             holder.itemView.requestFocus();
         }
