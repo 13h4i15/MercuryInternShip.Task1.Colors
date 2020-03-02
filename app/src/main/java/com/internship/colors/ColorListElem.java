@@ -31,6 +31,4 @@ class ColorListElem {
             return ItemColorState.values()[position % getColorStatesSize()].getColorId();
         }
     }
-
-
 }

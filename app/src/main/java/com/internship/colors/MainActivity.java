@@ -10,13 +10,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
-    private int focusedPosition = -1;
+    private int selectedPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +24,18 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ArrayList<ColorListElem> colorListElems = new ArrayList<>();
+       /* ArrayList<ColorListElem> colorListElems = new ArrayList<>();
         for (int i = 0; i < 50; ++i) {
             colorListElems.add(new ColorListElem());
-        }
+        }*/
 
         RecyclerView recyclerView = findViewById(R.id.colors_list_recycler);
         if (savedInstanceState != null) {
-            focusedPosition = savedInstanceState.getInt(POSITION_INDEX);
+            selectedPosition = savedInstanceState.getInt(POSITION_INDEX);
         }
-        colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(colorListElems, focusedPosition);
+        colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(/*colorListElems, */selectedPosition);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(colorsListRecyclerAdapter);
-
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.hide();
@@ -50,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        focusedPosition = colorsListRecyclerAdapter.getFocusedPosition();
-        outState.putInt(POSITION_INDEX, focusedPosition);
+        selectedPosition = colorsListRecyclerAdapter.getSelectedPosition();
+        outState.putInt(POSITION_INDEX, selectedPosition);
     }
 }
