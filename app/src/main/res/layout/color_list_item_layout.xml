@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:id="@+id/colors_list_item_body"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/colors_list_item_body"
+    android:orientation="horizontal"
     android:theme="@style/color_list_layout_style">
     <TextView
         android:id="@+id/colors_list_item_text"
@@ -13,6 +13,6 @@
         style="@style/color_list_layout_TextView_style" />
     <ImageView
         android:id="@+id/colors_list_item_circle"
-        android:layout_weight="1"
-        style="@style/color_list_layout_circle_style"/>
+        style="@style/color_list_layout_circle_style"
+        android:layout_weight="1" />
 </LinearLayout>

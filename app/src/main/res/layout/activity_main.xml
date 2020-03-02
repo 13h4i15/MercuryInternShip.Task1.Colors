@@ -21,6 +21,6 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
-        app:srcCompat="@android:drawable/ic_input_add"
-        style="@style/main_activity_layout_fab_style"/>
+        style="@style/main_activity_layout_fab_style"
+        app:srcCompat="@android:drawable/ic_input_add" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
