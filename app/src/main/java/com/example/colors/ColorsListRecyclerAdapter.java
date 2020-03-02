@@ -18,19 +18,9 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
     private int focusedPosition;
     private ViewGroup parent;
 
-
-    public int getFocusedPosition() {
-        return focusedPosition;
-    }
-
     public ColorsListRecyclerAdapter(ArrayList<ColorListElem> colorListElems, int focusedPosition) {
         this.colorListElems = colorListElems;
         this.focusedPosition = focusedPosition;
-    }
-
-    @Override
-    public int getItemCount() {
-        return colorListElems.size();
     }
 
     @NonNull
@@ -61,6 +51,16 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
             holder.itemView.requestFocus();
         }
     }
+
+    public int getFocusedPosition() {
+        return focusedPosition;
+    }
+
+    @Override
+    public int getItemCount() {
+        return colorListElems.size();
+    }
+
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
         public TextView textView;
