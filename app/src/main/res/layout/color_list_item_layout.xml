@@ -4,10 +4,7 @@
     android:id="@+id/colors_list_item_body"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/ColorList"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
-    android:clickable="true">
+    style="@style/ColorList">
     <TextView
         android:id="@+id/colors_list_item_text"
         android:layout_height="wrap_content"

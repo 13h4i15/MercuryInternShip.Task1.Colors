@@ -30,12 +30,15 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
         final RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
 
-        view.setOnFocusChangeListener((v, isFocused) -> {
-            if (isFocused && focusedPosition != recyclerViewHolder.getLayoutPosition()) {
+        view.setOnClickListener(v -> {
+            if (!v.isSelected() && focusedPosition != recyclerViewHolder.getLayoutPosition()) {
                 // Without second condition it tries to create Snackbar again when you change app state.
                 // Because of this it crashes app, it tries to create message earlier than parent context is created.
                 // We can fix it with app context, but it will be a wrong behavior.
+                v.setSelected(true);
+                int lastFocusedPosition = getFocusedPosition();
                 focusedPosition = recyclerViewHolder.getLayoutPosition();
+                notifyItemChanged(lastFocusedPosition);
                 String text = v.getContext().getString(R.string.fab_snackbar_message_text_pattern, focusedPosition);
                 Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
             }
@@ -49,7 +52,9 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         holder.textView.setText(text);
         holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.image.getContext(), ColorListElem.ItemColorState.getColorByPosition(position))));
         if (position == getFocusedPosition()) {
-            holder.itemView.requestFocus();
+            holder.itemView.setSelected(true);
+        } else {
+            holder.itemView.setSelected(false);
         }
     }
 
