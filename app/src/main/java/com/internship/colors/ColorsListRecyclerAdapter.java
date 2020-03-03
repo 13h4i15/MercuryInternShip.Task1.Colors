@@ -13,11 +13,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
-    //private final ArrayList<ColorListElem> colorListElems;
     private int selectedPosition;
+    private final int listSize;
 
-    public ColorsListRecyclerAdapter(/*ArrayList<ColorListElem> colorListElems,*/ int selectedPosition) {
-        //this.colorListElems = colorListElems;
+    public ColorsListRecyclerAdapter(int listSize, int selectedPosition) {
+        this.listSize = listSize;
         this.selectedPosition = selectedPosition;
     }
 
@@ -31,9 +31,9 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         view.setOnClickListener(v -> {
             if (!v.isSelected()) {
                 v.setSelected(true);
-                int lastFocusedPosition = getSelectedPosition();
+                int lastSelectedPosition = getSelectedPosition();
                 selectedPosition = recyclerViewHolder.getLayoutPosition();
-                notifyItemChanged(lastFocusedPosition);
+                notifyItemChanged(lastSelectedPosition);
                 String text = v.getContext().getString(R.string.fab_snackbar_message_text_pattern, selectedPosition);
                 Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
             }
@@ -55,7 +55,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
     @Override
     public int getItemCount() {
-        return 50; //colorListElems.size();
+        return listSize;
     }
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {

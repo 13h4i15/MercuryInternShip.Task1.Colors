@@ -14,7 +14,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
-    private int selectedPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,16 +23,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       /* ArrayList<ColorListElem> colorListElems = new ArrayList<>();
-        for (int i = 0; i < 50; ++i) {
-            colorListElems.add(new ColorListElem());
-        }*/
-
         RecyclerView recyclerView = findViewById(R.id.colors_list_recycler);
+        int selectedPosition = -1;
         if (savedInstanceState != null) {
             selectedPosition = savedInstanceState.getInt(POSITION_INDEX);
         }
-        colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(/*colorListElems, */selectedPosition);
+        colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(50, selectedPosition);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(colorsListRecyclerAdapter);
 
@@ -47,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        selectedPosition = colorsListRecyclerAdapter.getSelectedPosition();
+        int selectedPosition = colorsListRecyclerAdapter.getSelectedPosition();
         outState.putInt(POSITION_INDEX, selectedPosition);
     }
 }
