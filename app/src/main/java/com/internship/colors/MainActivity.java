@@ -34,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.hide();
-        /*fab.setOnClickListener(v -> {
-
-        });*/
     }
 
     @Override

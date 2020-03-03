@@ -1,4 +1,16 @@
 *.iml
+*.apk
+*.aar
+*.ap_
+*.aab
+*.class
+*.dex
+vcs.xml
+bin/
+gen/
+out/
+.gradle/
+build/
 /local.properties
 /.idea/caches
 /.idea/libraries
