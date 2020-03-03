@@ -59,8 +59,8 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
     }
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        private TextView textView;
-        private ImageView image;
+        private final TextView textView;
+        private final ImageView image;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);

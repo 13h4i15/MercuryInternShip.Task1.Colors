@@ -13,7 +13,7 @@ class ColorListElem {
         LILAC(R.color.lilac),
         BLANK(R.color.transparent);
 
-        private int colorId;
+        private final int colorId;
 
         ItemColorState(int colorId) {
             this.colorId = colorId;

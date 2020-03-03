@@ -3,5 +3,4 @@
     <string name="app_name">Цвета</string>
     <string name="list_item_text_pattern">Элемент %d</string>
     <string name="fab_snackbar_message_text_pattern">Вы нажали Элемент %d</string>
-    <string name="fab_snackbar_message_text_unclicked">Вы не выбрали какой-либо элемент</string>
 </resources>

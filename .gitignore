@@ -5,6 +5,7 @@
 *.aab
 *.class
 *.dex
+misc.xml
 vcs.xml
 bin/
 gen/
@@ -22,3 +23,4 @@ build/
 /captures
 .externalNativeBuild
 .cxx
+
