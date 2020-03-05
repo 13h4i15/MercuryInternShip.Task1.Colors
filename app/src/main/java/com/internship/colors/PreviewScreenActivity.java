@@ -6,43 +6,60 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Message;
-import android.widget.Toast;
 
 import java.util.concurrent.TimeUnit;
 
 
 public class PreviewScreenActivity extends AppCompatActivity{
-    Handler handler;
+    private final String THREADS_COUNT = "count";
+
+    int threadsCount = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview_screen);
+        if(savedInstanceState != null){
+            threadsCount = savedInstanceState.getInt(THREADS_COUNT);
+        }
+
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
-        handler = new Handler(){
+
+        Handler handler = new Handler(){
             @Override
             public void handleMessage(@NonNull Message msg) {
-                startActivity(mainActivityIntent);
-                finish();
+               if(msg.what == 0){
+                   startActivity(mainActivityIntent);
+                   finish();
+               }
             }
         };
-        pauseAction();
+
+        if(threadsCount == 0){
+            threadsCount++;
+            pauseAction(handler);
+        }
     }
 
-
-    private void pauseAction(){
-        Thread thread = new Thread(new Runnable() {
+    private void pauseAction(Handler handler){
+        new HandlerThread("PAUSE"){
             @Override
             public void run() {
                 try {
                     TimeUnit.SECONDS.sleep(2);
-                    handler.sendEmptyMessage(0);
-                }catch (InterruptedException e){
+                }catch (InterruptedException ignored){
 
                 }
+                handler.sendEmptyMessage(0);
             }
-        });
-        thread.start();
+        }.start();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(THREADS_COUNT, threadsCount);
     }
 }
