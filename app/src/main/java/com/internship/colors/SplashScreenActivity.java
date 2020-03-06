@@ -30,8 +30,10 @@ public class SplashScreenActivity extends AppCompatActivity {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(v -> {
-                        startActivity(mainActivityIntent);
-                        finish();
+                        if(v.booleanValue()) {
+                            startActivity(mainActivityIntent);
+                            finish();
+                        }
                     });
         }
     }
