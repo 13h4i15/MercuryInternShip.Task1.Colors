@@ -3,6 +3,7 @@ package com.internship.colors;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +23,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
 
-        Handler handler = new Handler() {
+        @SuppressLint("HandlerLeak") Handler handler = new Handler() {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == 0) {
