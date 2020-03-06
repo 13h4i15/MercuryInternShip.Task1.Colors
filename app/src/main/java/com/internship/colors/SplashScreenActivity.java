@@ -36,19 +36,19 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
+    private class CallablePauseAction implements Callable<Boolean> {
+        @Override
+        public Boolean call() {
+            return pauseAction();
+        }
+    }
+
     private boolean pauseAction() {
         try {
             TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException ignored) {
         }
         return true;
-    }
-
-    private class CallablePauseAction implements Callable<Boolean> {
-        @Override
-        public Boolean call() {
-            return pauseAction();
-        }
     }
 
     @Override
