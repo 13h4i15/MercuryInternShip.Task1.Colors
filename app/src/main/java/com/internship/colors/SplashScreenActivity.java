@@ -12,44 +12,38 @@ import android.os.Message;
 import java.util.concurrent.TimeUnit;
 
 
-public class PreviewScreenActivity extends AppCompatActivity{
-    private final String THREADS_COUNT = "count";
-
-    int threadsCount = 0;
+public class SplashScreenActivity extends AppCompatActivity {
+    private final String THREAD_ACTIVATED = "thread_activated";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preview_screen);
-        if(savedInstanceState != null){
-            threadsCount = savedInstanceState.getInt(THREADS_COUNT);
-        }
+        setContentView(R.layout.activity_splash_screen);
 
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
 
-        Handler handler = new Handler(){
+        Handler handler = new Handler() {
             @Override
             public void handleMessage(@NonNull Message msg) {
-               if(msg.what == 0){
-                   startActivity(mainActivityIntent);
-                   finish();
-               }
+                if (msg.what == 0) {
+                    startActivity(mainActivityIntent);
+                    finish();
+                }
             }
         };
 
-        if(threadsCount == 0){
-            threadsCount++;
+        if (savedInstanceState == null) { //it doesn't work if thread was initially activated
             pauseAction(handler);
         }
     }
 
-    private void pauseAction(Handler handler){
-        new HandlerThread("PAUSE"){
+    private void pauseAction(Handler handler) {
+        new HandlerThread("PAUSE") {
             @Override
             public void run() {
                 try {
                     TimeUnit.SECONDS.sleep(2);
-                }catch (InterruptedException ignored){
+                } catch (InterruptedException ignored) {
 
                 }
                 handler.sendEmptyMessage(0);
@@ -60,6 +54,6 @@ public class PreviewScreenActivity extends AppCompatActivity{
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(THREADS_COUNT, threadsCount);
+        outState.putBoolean(THREAD_ACTIVATED, true);
     }
 }
