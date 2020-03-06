@@ -6,14 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import io.reactivex.rxjava3.core.Observable;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-
 
 public class SplashScreenActivity extends AppCompatActivity {
     private final String THREAD_ACTIVATED = "thread_activated";
@@ -30,7 +28,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(v -> {
-                        if(v.booleanValue()) {
+                        if (v.booleanValue()) {
                             startActivity(mainActivityIntent);
                             finish();
                         }
