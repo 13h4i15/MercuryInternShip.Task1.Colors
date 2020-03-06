@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
 
+import io.reactivex.rxjava3.core.Observable;
+
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -22,33 +25,30 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
 
-        Handler handler = new Handler() {
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-                if (msg.what == 0) {
-                    startActivity(mainActivityIntent);
-                    finish();
-                }
-            }
-        };
-
         if (savedInstanceState == null) { //it doesn't work if thread was initially activated
-            pauseAction(handler);
+            Observable.fromCallable(new CallablePauseAction())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(v -> {
+                        startActivity(mainActivityIntent);
+                        finish();
+                    });
         }
     }
 
-    private void pauseAction(Handler handler) {
-        new HandlerThread("PAUSE") {
-            @Override
-            public void run() {
-                try {
-                    TimeUnit.SECONDS.sleep(2);
-                } catch (InterruptedException ignored) {
+    private boolean pauseAction() {
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException ignored) {
+        }
+        return true;
+    }
 
-                }
-                handler.sendEmptyMessage(0);
-            }
-        }.start();
+    private class CallablePauseAction implements Callable<Boolean> {
+        @Override
+        public Boolean call() throws Exception {
+            return pauseAction();
+        }
     }
 
     @Override
