@@ -46,7 +46,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private class CallablePauseAction implements Callable<Boolean> {
         @Override
-        public Boolean call() throws Exception {
+        public Boolean call() {
             return pauseAction();
         }
     }
