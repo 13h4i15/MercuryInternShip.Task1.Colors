@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SplashScreenActivity">
+
     <ImageView
         android:id="@+id/splash_image_id"
         android:layout_width="260dp"
@@ -15,6 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,4 +27,5 @@
         app:layout_constraintTop_toBottomOf="@+id/splash_image_id"
         app:layout_constraintVertical_bias="0.1"
         android:text="@string/app_name"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
