@@ -20,9 +20,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private long millisFromStart;
     private CompositeDisposable compositeDisposable;
-    private Disposable disposable;
     private boolean visibilityFlag = true;
-    private boolean delayEndedFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +38,12 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         if (millisOut > 0) {
             compositeDisposable = new CompositeDisposable();
-            disposable = Observable.timer(millisOut, TimeUnit.MILLISECONDS)
+            Disposable disposable = Observable.timer(millisOut, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(v -> {
                         if (visibilityFlag) startMainActivity();
-                        delayEndedFlag = true;
+                        compositeDisposable.dispose();
                     });
             compositeDisposable.add(disposable);
         } else {
@@ -68,7 +66,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (compositeDisposable != null) compositeDisposable.remove(disposable);
+        if (compositeDisposable != null) compositeDisposable.dispose();
     }
 
     @Override
@@ -81,6 +79,6 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         visibilityFlag = true;
-        if (delayEndedFlag) startMainActivity();
+        if (compositeDisposable.isDisposed()) startMainActivity();
     }
 }
