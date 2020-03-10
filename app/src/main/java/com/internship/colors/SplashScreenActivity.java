@@ -54,6 +54,5 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(THREAD_ACTIVATED, true);
     }
 }
