@@ -21,40 +21,23 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
-
-        @SuppressLint("HandlerLeak") Handler handler = new Handler() {
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-                if (msg.what == 0) {
-                    startActivity(mainActivityIntent);
-                    finish();
-                }
-            }
-        };
-
-        if (savedInstanceState == null) { //it doesn't work if thread was initially activated
-            pauseAction(handler);
+        if (savedInstanceState == null) {
+            pauseAction();
         }
     }
 
-    private void pauseAction(Handler handler) {
-        new HandlerThread("PAUSE") {
-            @Override
-            public void run() {
-                try {
-                    TimeUnit.SECONDS.sleep(2);
-                } catch (InterruptedException ignored) {
-
-                }
-                handler.sendEmptyMessage(0);
-            }
-        }.start();
+    private void pauseAction() {
+        Handler handler = new Handler();
+        Runnable runnable = () -> {
+            Intent mainActivityIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
+            startActivity(mainActivityIntent);
+            finish();
+        };
+        handler.postDelayed(runnable, 2000);
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(THREAD_ACTIVATED, true);
     }
 }
