@@ -1,6 +1,5 @@
 package com.internship.colors;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -14,6 +13,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SplashScreenActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +23,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) { //it doesn't work if thread was initially activated
             CompositeDisposable disposable = new CompositeDisposable();
-            disposable.add(Observable.timer(2000, TimeUnit.MILLISECONDS)
+            disposable.add(Observable.timer(5000, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(v -> {
@@ -31,10 +31,5 @@ public class SplashScreenActivity extends AppCompatActivity {
                         finish();
                     }));
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 }
