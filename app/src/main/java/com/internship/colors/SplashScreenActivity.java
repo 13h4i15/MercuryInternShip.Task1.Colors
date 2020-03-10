@@ -28,9 +28,4 @@ public class SplashScreenActivity extends AppCompatActivity {
         };
         handler.postDelayed(runnable, 2000);
     }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 }
