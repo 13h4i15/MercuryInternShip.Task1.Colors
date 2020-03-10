@@ -3,19 +3,11 @@ package com.internship.colors;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
-
-import java.util.concurrent.TimeUnit;
-
 
 public class SplashScreenActivity extends AppCompatActivity {
-    private final String THREAD_ACTIVATED = "thread_activated";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
