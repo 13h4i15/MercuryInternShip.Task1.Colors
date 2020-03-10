@@ -30,7 +30,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
 
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        long millisOut = 5000 - (currentTime - millisFromStart);
+        long millisOut = 2000 - (currentTime - millisFromStart);
 
         if (millisOut > 0) {
             pauseAction(millisOut);
