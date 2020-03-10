@@ -21,8 +21,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) { //it doesn't work if thread was initially activated
             CompositeDisposable disposable = new CompositeDisposable();
-            disposable.add(Observable.timer(2000, TimeUnit.MILLISECONDS)
-                    .subscribeOn(Schedulers.io())
+            disposable.add(Observable.timer(5000, TimeUnit.MILLISECONDS)
+                    .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(v -> {
                         Intent mainActivityIntent = new Intent(this, MainActivity.class);
