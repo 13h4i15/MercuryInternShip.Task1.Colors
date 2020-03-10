@@ -19,14 +19,13 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
-
         if (savedInstanceState == null) { //it doesn't work if thread was initially activated
             CompositeDisposable disposable = new CompositeDisposable();
             disposable.add(Observable.timer(2000, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(v -> {
+                        Intent mainActivityIntent = new Intent(this, MainActivity.class);
                         startActivity(mainActivityIntent);
                         finish();
                     }));
