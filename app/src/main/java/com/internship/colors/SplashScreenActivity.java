@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -24,31 +25,15 @@ public class SplashScreenActivity extends AppCompatActivity {
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
 
         if (savedInstanceState == null) { //it doesn't work if thread was initially activated
-            Observable.fromCallable(new CallablePauseAction())
+            CompositeDisposable disposable = new CompositeDisposable();
+            disposable.add(Observable.timer(2000, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(v -> {
-                        if (v.booleanValue()) {
-                            startActivity(mainActivityIntent);
-                            finish();
-                        }
-                    });
+                        startActivity(mainActivityIntent);
+                        finish();
+                    }));
         }
-    }
-
-    private class CallablePauseAction implements Callable<Boolean> {
-        @Override
-        public Boolean call() {
-            return pauseAction();
-        }
-    }
-
-    private boolean pauseAction() {
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException ignored) {
-        }
-        return true;
     }
 
     @Override
