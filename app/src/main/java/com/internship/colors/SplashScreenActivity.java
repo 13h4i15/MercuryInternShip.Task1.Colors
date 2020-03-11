@@ -10,13 +10,13 @@ import android.os.Handler;
 import java.util.Calendar;
 
 public class SplashScreenActivity extends AppCompatActivity {
-    private final String START_TIME_TAG = "millis";
+    private final static String START_TIME_TAG = "millis";
 
     private Handler handler;
     private Runnable runnable;
     private long millisFromStart;
-    private boolean visibilityFlag = true;
-    private boolean delayEndedFlag = false;
+    private boolean isStarted = true;
+    private boolean hasDelayEnded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +42,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void pauseAction(long timeOut) {
         handler = new Handler();
         runnable = () -> {
-            if (visibilityFlag) startMainActivity();
-            delayEndedFlag = true;
+            if (isStarted) startMainActivity();
+            hasDelayEnded = true;
         };
         handler.postDelayed(runnable, timeOut);
     }
@@ -62,20 +62,20 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (handler != null) handler.removeCallbacks(runnable);
+        super.onDestroy();
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        visibilityFlag = false;
+    protected void onStop() {
+        isStarted = false;
+        super.onStop();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        visibilityFlag = true;
-        if (delayEndedFlag) startMainActivity();
+        isStarted = true;
+        if (hasDelayEnded) startMainActivity();
     }
 }
