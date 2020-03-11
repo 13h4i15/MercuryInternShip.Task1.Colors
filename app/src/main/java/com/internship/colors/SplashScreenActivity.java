@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -38,12 +39,11 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         if (millisOut > 0) {
             compositeDisposable = new CompositeDisposable();
-            Disposable disposable = Observable.timer(millisOut, TimeUnit.MILLISECONDS)
+            Disposable disposable = Single.timer(millisOut, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(v -> {
                         if (visibilityFlag) startMainActivity();
-                        compositeDisposable.dispose();
                     });
             compositeDisposable.add(disposable);
         } else {
