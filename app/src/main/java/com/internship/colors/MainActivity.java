@@ -33,13 +33,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(colorsListRecyclerAdapter);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.hide();
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
         int selectedPosition = colorsListRecyclerAdapter.getSelectedPosition();
         outState.putInt(POSITION_INDEX, selectedPosition);
+
+        super.onSaveInstanceState(outState);
     }
 }
