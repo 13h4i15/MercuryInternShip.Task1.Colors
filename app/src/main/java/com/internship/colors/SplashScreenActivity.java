@@ -43,9 +43,9 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
         outState.putLong(START_TIME_TAG, millisAtStart);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
