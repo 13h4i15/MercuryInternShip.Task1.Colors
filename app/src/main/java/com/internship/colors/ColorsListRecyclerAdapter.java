@@ -12,12 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
     private int selectedPosition;
-    private final int listSize;
+    private List<Integer> colorsList;
 
-    public ColorsListRecyclerAdapter(int listSize, int selectedPosition) {
-        this.listSize = listSize;
+
+    public ColorsListRecyclerAdapter(List<Integer> colorsList, int selectedPosition) {
+        this.colorsList = colorsList;
         this.selectedPosition = selectedPosition;
     }
 
@@ -38,6 +42,11 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
                 Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
             }
         });
+
+        view.setOnLongClickListener(v -> {
+            //todo delete dialog
+            return true;
+        });
         return recyclerViewHolder;
     }
 
@@ -45,7 +54,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         String text = holder.textView.getContext().getString(R.string.list_item_text_pattern, position);
         holder.textView.setText(text);
-        holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.image.getContext(), ColorListElem.ItemColorState.getColorByPosition(position))));
+        holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.image.getContext(), colorsList.get(position))));
         holder.itemView.setSelected(position == getSelectedPosition());
     }
 
@@ -55,7 +64,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
     @Override
     public int getItemCount() {
-        return listSize;
+        return colorsList.size();
     }
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
