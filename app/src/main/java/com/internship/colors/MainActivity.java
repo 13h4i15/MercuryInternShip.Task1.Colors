@@ -1,5 +1,6 @@
 package com.internship.colors;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,9 +31,14 @@ public class MainActivity extends AppCompatActivity {
         }
         colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(50, selectedPosition);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(colorsListRecyclerAdapter);
 
         FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            Intent createElemIntent = new Intent(this, ColorElemCreateActivity.class);
+            startActivity(createElemIntent);
+        });
     }
 
     @Override
