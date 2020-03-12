@@ -14,14 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
-    private static final String COLOR_LIST = "list";
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
-    private ArrayList<ColorListElem> colorsList = new ArrayList<>();
+    private List<ColorListElem> colorsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         int selectedPosition = -1;
         if (savedInstanceState != null) {
             selectedPosition = savedInstanceState.getInt(POSITION_INDEX);
-            colorsList = savedInstanceState.getIntegerArrayList(COLOR_LIST);
         }
         colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(colorsList, selectedPosition);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -54,8 +54,12 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(data == null) return;
-        int newListElem = data.getIntExtra("color", 0);
-        colorsList.add(newListElem);
+        int lastElemNumber = -1;
+        if(colorsList.size() != 0) {
+            lastElemNumber = colorsList.get(colorsList.size() - 1).getPosition();
+        }
+        int newListElemColor = data.getIntExtra("color", 0);
+        colorsList.add(new ColorListElem(newListElemColor, lastElemNumber+1));
         colorsListRecyclerAdapter.notifyDataSetChanged();
 
     }
@@ -64,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         int selectedPosition = colorsListRecyclerAdapter.getSelectedPosition();
         outState.putInt(POSITION_INDEX, selectedPosition);
-        outState.putIntegerArrayList(COLOR_LIST, colorsList);
         super.onSaveInstanceState(outState);
     }
 }

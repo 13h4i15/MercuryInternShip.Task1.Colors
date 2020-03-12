@@ -1,7 +1,6 @@
 package com.internship.colors;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
@@ -46,13 +44,24 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         });
 
         view.setOnLongClickListener(v -> {
+            view.setSelected(true);
+            int lastSelectedPosition = getSelectedPosition();
+            selectedPosition = recyclerViewHolder.getLayoutPosition();
+            notifyItemChanged(lastSelectedPosition);
+
+            ColorListElem currentListElem = colorsList.get(recyclerViewHolder.getLayoutPosition());
             AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
-            builder.setMessage(parent.getContext().getString(R.string.dialog_delete_question, recyclerViewHolder.getLayoutPosition()));
+            builder.setMessage(parent.getContext().getString(R.string.dialog_delete_question, currentListElem.getPosition()));
             builder.setPositiveButton(parent.getContext().getString(R.string.dialog_yes_answer), (dialog, which) -> {
+                selectedPosition = -1;
                 colorsList.remove(recyclerViewHolder.getLayoutPosition());
                 notifyDataSetChanged();
             });
-            builder.setNegativeButton(parent.getContext().getString(R.string.dialog_no_answer),(dialog, which) -> {});
+            builder.setNegativeButton(parent.getContext().getString(R.string.dialog_no_answer),(dialog, which) -> {
+                view.setSelected(false);
+                selectedPosition = -1;
+                notifyItemChanged(recyclerViewHolder.getLayoutPosition());
+            });
             builder.create().show();
             return true;
         });
