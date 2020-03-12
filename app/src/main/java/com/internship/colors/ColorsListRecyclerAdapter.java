@@ -1,5 +1,7 @@
 package com.internship.colors;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +19,10 @@ import java.util.List;
 
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
     private int selectedPosition;
-    private List<Integer> colorsList;
+    private List<ColorListElem> colorsList;
 
 
-    public ColorsListRecyclerAdapter(List<Integer> colorsList, int selectedPosition) {
+    public ColorsListRecyclerAdapter(List<ColorListElem> colorsList, int selectedPosition) {
         this.colorsList = colorsList;
         this.selectedPosition = selectedPosition;
     }
@@ -44,7 +46,14 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         });
 
         view.setOnLongClickListener(v -> {
-            //todo delete dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
+            builder.setMessage(parent.getContext().getString(R.string.dialog_delete_question, recyclerViewHolder.getLayoutPosition()));
+            builder.setPositiveButton(parent.getContext().getString(R.string.dialog_yes_answer), (dialog, which) -> {
+                colorsList.remove(recyclerViewHolder.getLayoutPosition());
+                notifyDataSetChanged();
+            });
+            builder.setNegativeButton(parent.getContext().getString(R.string.dialog_no_answer),(dialog, which) -> {});
+            builder.create().show();
             return true;
         });
         return recyclerViewHolder;
@@ -52,9 +61,9 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-        String text = holder.textView.getContext().getString(R.string.list_item_text_pattern, position);
+        String text = holder.textView.getContext().getString(R.string.list_item_text_pattern, colorsList.get(position).getPosition());
         holder.textView.setText(text);
-        holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.image.getContext(), colorsList.get(position))));
+        holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.image.getContext(), colorsList.get(position).getColor())));
         holder.itemView.setSelected(position == getSelectedPosition());
     }
 

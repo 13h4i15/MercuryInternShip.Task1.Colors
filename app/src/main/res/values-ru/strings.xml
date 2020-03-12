@@ -3,4 +3,7 @@
     <string name="app_name">Цвета</string>
     <string name="list_item_text_pattern">Элемент %d</string>
     <string name="fab_snackbar_message_text_pattern">Вы нажали Элемент %d</string>
+    <string name="dialog_delete_question">Вы уверены, что хотете удалить Элемент %d?</string>
+    <string name="dialog_yes_answer">Да</string>
+    <string name="dialog_no_answer">Нет</string>
 </resources>

@@ -2,6 +2,28 @@ package com.internship.colors;
 
 class ColorListElem {
     // made for expressiveness and future update.
+    private int color, position;
+
+    public ColorListElem(int color, int position){
+        this.color = color;
+        this.position = position;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     public enum ItemColorState {
         RED(R.color.red),

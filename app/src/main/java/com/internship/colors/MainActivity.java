@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String COLOR_LIST = "list";
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
-    private ArrayList<Integer> colorsList = new ArrayList<>();
+    private ArrayList<ColorListElem> colorsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
