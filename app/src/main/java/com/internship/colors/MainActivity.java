@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
+            fab.setClickable(false);
             Intent createElemIntent = new Intent(this, ColorElemCreateActivity.class);
             int lastElemNumber = -1;
             if(colorsList.size() != 0) {
@@ -103,5 +104,11 @@ public class MainActivity extends AppCompatActivity {
             objectMapper.writeValue(file, colorsList);
         }catch (IOException ignore){}
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fab.setClickable(true);
     }
 }
