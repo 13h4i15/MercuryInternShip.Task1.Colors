@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         File file = new File(path, SAVE_FILE_NAME);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            objectMapper.writeValue(file, objectMapper);
+            objectMapper.writeValue(file, colorsList);
         } catch (IOException ignore) {
         }
 
