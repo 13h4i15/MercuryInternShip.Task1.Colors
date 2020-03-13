@@ -6,13 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect
 class ColorListElem {
-    // made for expressiveness and future update.
-    private int color, position;
+    private int color, number;
 
     @JsonCreator
-    public ColorListElem(@JsonProperty("color") int color, @JsonProperty("position") int position){
+    public ColorListElem(@JsonProperty("color") int color, @JsonProperty("number") int number) {
         this.color = color;
-        this.position = position;
+        this.number = number;
     }
 
     public int getColor() {
@@ -23,12 +22,12 @@ class ColorListElem {
         this.color = color;
     }
 
-    public int getPosition() {
-        return position;
+    public int getNumber() {
+        return number;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public enum ItemColorState {

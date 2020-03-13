@@ -17,7 +17,7 @@ import java.util.List;
 
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
     private int selectedPosition;
-    private List<ColorListElem> colorsList;
+    private final List<ColorListElem> colorsList;
 
 
     public ColorsListRecyclerAdapter(List<ColorListElem> colorsList, int selectedPosition) {
@@ -38,7 +38,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
                 int lastSelectedPosition = getSelectedPosition();
                 selectedPosition = recyclerViewHolder.getLayoutPosition();
                 notifyItemChanged(lastSelectedPosition);
-                String text = v.getContext().getString(R.string.fab_snackbar_message_text_pattern, colorsList.get(selectedPosition).getPosition());
+                String text = v.getContext().getString(R.string.fab_snackbar_message_text_pattern, colorsList.get(selectedPosition).getNumber());
                 Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
             }
         });
@@ -51,26 +51,30 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
             ColorListElem currentListElem = colorsList.get(recyclerViewHolder.getLayoutPosition());
             AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
-            builder.setMessage(parent.getContext().getString(R.string.dialog_delete_question, currentListElem.getPosition()));
+            builder.setMessage(parent.getContext().getString(R.string.dialog_delete_question, currentListElem.getNumber()));
+
             builder.setPositiveButton(parent.getContext().getString(R.string.dialog_yes_answer), (dialog, which) -> {
-                selectedPosition = -1;
                 colorsList.remove(recyclerViewHolder.getLayoutPosition());
                 notifyDataSetChanged();
             });
-            builder.setNegativeButton(parent.getContext().getString(R.string.dialog_no_answer),(dialog, which) -> {
+
+            builder.setNegativeButton(parent.getContext().getString(R.string.dialog_no_answer), (dialog, which) -> {
                 view.setSelected(false);
-                selectedPosition = -1;
                 notifyItemChanged(recyclerViewHolder.getLayoutPosition());
             });
+
+            selectedPosition = -1;
             builder.create().show();
+
             return true;
         });
+
         return recyclerViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-        String text = holder.textView.getContext().getString(R.string.list_item_text_pattern, colorsList.get(position).getPosition());
+        String text = holder.textView.getContext().getString(R.string.list_item_text_pattern, colorsList.get(position).getNumber());
         holder.textView.setText(text);
         holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.image.getContext(), colorsList.get(position).getColor())));
         holder.itemView.setSelected(position == getSelectedPosition());
