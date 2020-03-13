@@ -13,12 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
+    private static final String SAVE_FILE_NAME = "coloredListSave.json";
+
     private int selectedPosition;
     private final List<ColorListElem> colorsList;
-
 
     public ColorsListRecyclerAdapter(List<ColorListElem> colorsList, int selectedPosition) {
         this.colorsList = colorsList;
@@ -56,6 +61,15 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
             builder.setPositiveButton(parent.getContext().getString(R.string.dialog_yes_answer), (dialog, which) -> {
                 colorsList.remove(recyclerViewHolder.getLayoutPosition());
                 notifyDataSetChanged();
+
+                //You need to save state after any change quickly, in case app's crash
+                File path = parent.getContext().getFilesDir();
+                File file = new File(path, SAVE_FILE_NAME);
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    objectMapper.writeValue(file, colorsList);
+                } catch (IOException ignore) {
+                }
             });
 
             builder.setNegativeButton(parent.getContext().getString(R.string.dialog_no_answer), (dialog, which) -> {

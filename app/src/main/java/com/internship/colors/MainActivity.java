@@ -75,6 +75,15 @@ public class MainActivity extends AppCompatActivity {
         colorsList.add(new ColorListElem(newListElemColor, getLastElemNumber() + 1));
         colorsListRecyclerAdapter.notifyDataSetChanged();
 
+        //You need to save state after any change quickly, in case app's crash
+        File path = this.getFilesDir();
+        File file = new File(path, SAVE_FILE_NAME);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.writeValue(file, colorsList);
+        } catch (IOException ignore) {
+        }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -89,19 +98,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(POSITION_INDEX, colorsListRecyclerAdapter.getSelectedPosition());
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onDestroy() {
-        File path = this.getFilesDir();
-        File file = new File(path, SAVE_FILE_NAME);
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.writeValue(file, colorsList);
-        } catch (IOException ignore) {
-        }
-
-        super.onDestroy();
     }
 
     @Override
