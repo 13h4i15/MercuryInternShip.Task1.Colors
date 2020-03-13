@@ -27,14 +27,16 @@ public class ColorElemCreateActivity extends AppCompatActivity {
         RadioGroup radioGroup = findViewById(R.id.select_color_radio_group);
         for(ColorListElem.ItemColorState i: ColorListElem.ItemColorState.values()){
             RadioButton radioButton = new RadioButton(this);
+            radioButton.setLayoutParams(new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT));
             radioButton.setBackgroundColor(ContextCompat.getColor(this, i.getColorId()));
+            radioButton.setText(i.toString());
             radioGroup.addView(radioButton);
         }
 
         Button button = findViewById(R.id.add_color_elem_btn);
         button.setOnClickListener(v -> {
             Intent intent = new Intent();
-            int checkedColor = ColorListElem.ItemColorState.getColorByPosition((int)radioGroup.getCheckedRadioButtonId()-1);
+            int checkedColor = ColorListElem.ItemColorState.getColorByPosition((int)radioGroup.getCheckedRadioButtonId()-1).getColorId();
             intent.putExtra("color", checkedColor);
             setResult(1, intent);
             finish();

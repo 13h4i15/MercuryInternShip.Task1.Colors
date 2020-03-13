@@ -21,17 +21,22 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="100">
     <RadioGroup
         android:id="@+id/select_color_radio_group"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="100"/>
+        android:layout_height="wrap_content" />
+</ScrollView>
 
     <Button
         android:id="@+id/add_color_elem_btn"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_width="match_parent"
-        android:layout_weight="0.1"/>
+        android:layout_weight="0.1"
+        style="@style/AddColoredElemBtn"
+        android:text="@string/add_colored_elem"/>
 
 </LinearLayout>

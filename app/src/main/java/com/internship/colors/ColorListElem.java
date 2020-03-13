@@ -49,8 +49,8 @@ class ColorListElem {
             return ItemColorState.values().length;
         }
 
-        public static int getColorByPosition(int position) {
-            return ItemColorState.values()[position % getColorStatesSize()].getColorId();
+        public static ItemColorState getColorByPosition(int position) {
+            return ItemColorState.values()[position % getColorStatesSize()];
         }
     }
 }

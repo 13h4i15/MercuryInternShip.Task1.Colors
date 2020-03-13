@@ -20,7 +20,7 @@
 
     <style name="SplashTheme.TextView">
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@android:color/primary_text_dark</item>
     </style>
 
     <style name="ColorList">
@@ -45,5 +45,10 @@
         <item name="android:layout_gravity">bottom|end</item>
         <item name="android:layout_margin">@dimen/fab_margin</item>
         <item name="android:tint">@android:color/white</item>
+    </style>
+
+    <style name="AddColoredElemBtn">
+        <item name="android:background">@color/design_default_color_primary</item>
+        <item name="android:textColor">@android:color/primary_text_dark</item>
     </style>
 </resources>

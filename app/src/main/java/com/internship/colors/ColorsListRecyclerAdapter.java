@@ -38,7 +38,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
                 int lastSelectedPosition = getSelectedPosition();
                 selectedPosition = recyclerViewHolder.getLayoutPosition();
                 notifyItemChanged(lastSelectedPosition);
-                String text = v.getContext().getString(R.string.fab_snackbar_message_text_pattern, selectedPosition);
+                String text = v.getContext().getString(R.string.fab_snackbar_message_text_pattern, colorsList.get(selectedPosition).getPosition());
                 Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
             }
         });

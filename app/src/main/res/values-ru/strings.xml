@@ -6,4 +6,5 @@
     <string name="dialog_delete_question">Вы уверены, что хотете удалить Элемент %d?</string>
     <string name="dialog_yes_answer">Да</string>
     <string name="dialog_no_answer">Нет</string>
+    <string name="add_colored_elem">Добавить</string>
 </resources>
