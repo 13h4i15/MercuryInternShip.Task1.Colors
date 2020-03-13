@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 public class ColorElemCreateActivity extends AppCompatActivity {
+    private static final String NUMBER_INDEX_EXTRA = "index";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,10 @@ public class ColorElemCreateActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        Intent extraDataIntent = getIntent();
+        int elemNumber = extraDataIntent.getIntExtra(NUMBER_INDEX_EXTRA, 0);
+        getSupportActionBar().setTitle(this.getString(R.string.list_item_text_pattern, elemNumber));
 
         RadioGroup radioGroup = findViewById(R.id.select_color_radio_group);
         for(ColorListElem.ItemColorState i: ColorListElem.ItemColorState.values()){

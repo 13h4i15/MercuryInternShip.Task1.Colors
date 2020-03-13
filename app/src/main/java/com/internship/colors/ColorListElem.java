@@ -1,10 +1,16 @@
 package com.internship.colors;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonAutoDetect
 class ColorListElem {
     // made for expressiveness and future update.
     private int color, position;
 
-    public ColorListElem(int color, int position){
+    @JsonCreator
+    public ColorListElem(@JsonProperty("color") int color, @JsonProperty("position") int position){
         this.color = color;
         this.position = position;
     }
