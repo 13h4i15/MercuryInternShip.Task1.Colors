@@ -1,7 +1,12 @@
 package com.internship.colors;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String SELECTED_COLOR_EXTRA = "color";
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
-    private List<ColorListElement> colorList;
     private FloatingActionButton fab;
+    List<ColorListElement> colorList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +40,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        try {
-            colorList = ColorListJsonLoader.readJsonFromFile(getFilesDir());
+        /*try {
+            ColorListJsonLoader.writeJsonInFile(context.getFilesDir(), colorList);
         } catch (IOException ignore) {
-            colorList = new ArrayList<>();
-        }
+        }*/
 
         RecyclerView recyclerView = findViewById(R.id.colors_list_recycler);
 
@@ -48,18 +52,53 @@ public class MainActivity extends AppCompatActivity {
             selectedPosition = savedInstanceState.getInt(POSITION_INDEX);
         }
 
+        try {
+            colorList = ColorListJsonLoader.readJsonFromFile(getFilesDir());
+        } catch (IOException ignore) {
+            colorList = new ArrayList<>();
+        }
         colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(colorList, selectedPosition);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(colorsListRecyclerAdapter);
+
+        CustomBroadcastReceiver receiver = new CustomBroadcastReceiver();
+        this.registerReceiver(receiver, new IntentFilter(CustomBroadcastReceiver.ACTION));
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             fab.setClickable(false); //with this you can't make multy-click
             Intent createElementIntent = new Intent(this, ColorElemCreateActivity.class);
-            createElementIntent.putExtra(NUMBER_INDEX_EXTRA, getNumberForNewElement() + 1);
+            createElementIntent.putExtra(NUMBER_INDEX_EXTRA, colorsListRecyclerAdapter.getNumberForNewElement());
             startActivityForResult(createElementIntent, ADD_ELEMENT_REQUEST_CODE);
         });
+    }
+
+    public class CustomBroadcastReceiver extends BroadcastReceiver{
+        public static final String ACTION = "ACTION";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int test = intent.getIntExtra("extra", 0);
+
+            int currentListElement = colorList.get(test).getNumber();
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage(context.getString(R.string.dialog_delete_question, currentListElement));
+
+            builder.setPositiveButton(context.getString(R.string.dialog_yes_answer), (dialog, which) -> {
+                colorsListRecyclerAdapter.deleteColorElement(test, context);
+            });
+
+            builder.setNegativeButton(context.getString(R.string.dialog_no_answer), (dialog, which) -> {
+                colorsListRecyclerAdapter.setSelectedPosition(-1);
+                colorsListRecyclerAdapter.notifyDataSetChanged();
+            });
+            builder.setOnDismissListener(dialog -> {
+                colorsListRecyclerAdapter.setSelectedPosition(-1);
+                colorsListRecyclerAdapter.notifyDataSetChanged();
+            });
+            builder.create().show();
+        }
     }
 
     @Override
@@ -68,22 +107,12 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == ADD_ELEMENT_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 int newListElementColor = data.getIntExtra(SELECTED_COLOR_EXTRA, 0);
-                colorsListRecyclerAdapter.addColorElement(new ColorListElement(newListElementColor, getNumberForNewElement() + 1));
-                try {
-                    ColorListJsonLoader.writeJsonInFile(getFilesDir(), colorList);
-                } catch (IOException ignore) {
-                }
+                colorsListRecyclerAdapter.addColorElement(new ColorListElement(newListElementColor, colorsListRecyclerAdapter.getNumberForNewElement()), this);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private int getNumberForNewElement() {
-        if (colorList.size() != 0) {
-            return colorList.get(colorList.size() - 1).getNumber() + 1;
-        }
-        return 0;
-    }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {

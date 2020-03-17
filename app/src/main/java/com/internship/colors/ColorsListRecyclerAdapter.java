@@ -1,6 +1,8 @@
 package com.internship.colors;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +15,17 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
-
     private int selectedPosition;
     private final List<ColorListElement> colorList;
 
@@ -45,34 +52,19 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
             }
         });
 
+
+
         view.setOnLongClickListener(v -> {
             view.setSelected(true);
             int lastSelectedPosition = getSelectedPosition();
             selectedPosition = recyclerViewHolder.getLayoutPosition();
             notifyItemChanged(lastSelectedPosition);
 
-            ColorListElement currentListElement = colorList.get(recyclerViewHolder.getLayoutPosition());
-            AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
-            builder.setMessage(parent.getContext().getString(R.string.dialog_delete_question, currentListElement.getNumber()));
+            Intent intent = new Intent();
+            intent.putExtra("extra", recyclerViewHolder.getLayoutPosition());
+            intent.setAction(MainActivity.CustomBroadcastReceiver.ACTION);
+            parent.getContext().sendBroadcast(intent);
 
-            builder.setPositiveButton(parent.getContext().getString(R.string.dialog_yes_answer), (dialog, which) -> {
-                deleteColorElement(recyclerViewHolder.getLayoutPosition());
-
-                //You need to save state after any change quickly, in case app's crash
-                try {
-                    File path = parent.getContext().getFilesDir();
-                    ColorListJsonLoader.writeJsonInFile(path, colorList);
-                } catch (IOException ignore) {
-                }
-            });
-
-            builder.setNegativeButton(parent.getContext().getString(R.string.dialog_no_answer), (dialog, which) -> {
-                view.setSelected(false);
-                notifyItemChanged(recyclerViewHolder.getLayoutPosition());
-            });
-
-            selectedPosition = -1;
-            builder.create().show();
 
             return true;
         });
@@ -80,14 +72,29 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         return recyclerViewHolder;
     }
 
-    public void addColorElement(ColorListElement element){
+    public void addColorElement(ColorListElement element, Context context){
         colorList.add(element);
         notifyDataSetChanged();
+        try {
+            ColorListJsonLoader.writeJsonInFile(context.getFilesDir(), colorList);
+        } catch (IOException ignore) {
+        }
     }
 
-    public void deleteColorElement(int index){
+    public void deleteColorElement(int index, Context context){
         colorList.remove(index);
         notifyDataSetChanged();
+        try {
+            ColorListJsonLoader.writeJsonInFile(context.getFilesDir(), colorList);
+        } catch (IOException ignore) {
+        }
+    }
+
+    public int getNumberForNewElement(){
+        if (getItemCount() != 0) {
+            return colorList.get(colorList.size() - 1).getNumber() + 1;
+        }
+        return 0;
     }
 
     @Override
@@ -100,6 +107,10 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
     public int getSelectedPosition() {
         return selectedPosition;
+    }
+
+    public void setSelectedPosition(int selectedPosition){
+        this.selectedPosition = selectedPosition;
     }
 
     @Override

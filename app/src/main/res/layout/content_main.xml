@@ -11,6 +11,5 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/colors_list_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

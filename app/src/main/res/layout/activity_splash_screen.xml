@@ -12,20 +12,20 @@
         android:layout_height="260dp"
         android:src="@drawable/nyan_cat"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
     <TextView
+        style="@style/SplashTheme.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/SplashTheme.TextView"
+        android:text="@string/app_name"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/splash_image_id"
-        app:layout_constraintVertical_bias="0.1"
-        android:text="@string/app_name"/>
+        app:layout_constraintVertical_bias="0.1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
