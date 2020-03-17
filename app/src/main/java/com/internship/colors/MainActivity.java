@@ -23,9 +23,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
     private static final String NUMBER_INDEX_EXTRA = "index";
     private static final String SAVE_FILE_NAME = "coloredListSave.json";
+    private static final String SELECTED_COLOR_EXTRA = "color";
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
-    private List<ColorListElem> colorsList;
+    private List<ColorListElement> colorsList;
     private FloatingActionButton fab;
 
     @Override
@@ -36,13 +37,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        File path = this.getFilesDir();
+        File path = getFilesDir();
         File file = new File(path, SAVE_FILE_NAME);
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            colorsList = objectMapper.readValue(file, new TypeReference<List<ColorListElem>>() {
-            });
+            colorsList = objectMapper.readValue(file, new TypeReference<List<ColorListElement>>() {});
         } catch (IOException ignore) {
             colorsList = new ArrayList<>();
         }
@@ -62,21 +62,21 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             fab.setClickable(false); //with this you can't make multy-click
-            Intent createElemIntent = new Intent(this, ColorElemCreateActivity.class);
-            createElemIntent.putExtra(NUMBER_INDEX_EXTRA, getLastElemNumber() + 1);
-            startActivityForResult(createElemIntent, 1);
+            Intent createElementIntent = new Intent(this, ColorElemCreateActivity.class);
+            createElementIntent.putExtra(NUMBER_INDEX_EXTRA, getLastElementNumber() + 1);
+            startActivityForResult(createElementIntent, 1);
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (data == null) return;
-        int newListElemColor = data.getIntExtra("color", 0);
-        colorsList.add(new ColorListElem(newListElemColor, getLastElemNumber() + 1));
+        int newListElementColor = data.getIntExtra(SELECTED_COLOR_EXTRA, 0);
+        colorsList.add(new ColorListElement(newListElementColor, getLastElementNumber() + 1));
         colorsListRecyclerAdapter.notifyDataSetChanged();
 
         //You need to save state after any change quickly, in case app's crash
-        File path = this.getFilesDir();
+        File path = getFilesDir();
         File file = new File(path, SAVE_FILE_NAME);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private int getLastElemNumber() {
+    private int getLastElementNumber() {
         if (colorsList.size() != 0) {
             return colorsList.get(colorsList.size() - 1).getNumber();
         }

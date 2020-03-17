@@ -23,9 +23,9 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
     private static final String SAVE_FILE_NAME = "coloredListSave.json";
 
     private int selectedPosition;
-    private final List<ColorListElem> colorsList;
+    private final List<ColorListElement> colorsList;
 
-    public ColorsListRecyclerAdapter(List<ColorListElem> colorsList, int selectedPosition) {
+    public ColorsListRecyclerAdapter(List<ColorListElement> colorsList, int selectedPosition) {
         this.colorsList = colorsList;
         this.selectedPosition = selectedPosition;
     }
@@ -33,7 +33,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.color_list_item_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.color_list_element_layout, parent, false);
 
         final RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
 
@@ -54,9 +54,9 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
             selectedPosition = recyclerViewHolder.getLayoutPosition();
             notifyItemChanged(lastSelectedPosition);
 
-            ColorListElem currentListElem = colorsList.get(recyclerViewHolder.getLayoutPosition());
+            ColorListElement currentListElement = colorsList.get(recyclerViewHolder.getLayoutPosition());
             AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
-            builder.setMessage(parent.getContext().getString(R.string.dialog_delete_question, currentListElem.getNumber()));
+            builder.setMessage(parent.getContext().getString(R.string.dialog_delete_question, currentListElement.getNumber()));
 
             builder.setPositiveButton(parent.getContext().getString(R.string.dialog_yes_answer), (dialog, which) -> {
                 colorsList.remove(recyclerViewHolder.getLayoutPosition());
@@ -109,8 +109,8 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.colors_list_item_text);
-            image = itemView.findViewById(R.id.colors_list_item_circle);
+            textView = itemView.findViewById(R.id.colors_list_element_text);
+            image = itemView.findViewById(R.id.colors_list_element_circle);
         }
     }
 }

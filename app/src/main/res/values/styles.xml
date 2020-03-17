@@ -28,17 +28,17 @@
         <item name="android:paddingEnd">@dimen/color_list_horizontal_padding</item>
         <item name="android:paddingTop">@dimen/color_list_vertical_padding</item>
         <item name="android:paddingBottom">@dimen/color_list_vertical_padding</item>
-        <item name="android:background">@drawable/color_list_item_background_states</item>
+        <item name="android:background">@drawable/color_list_element_background_states</item>
     </style>
 
     <style name="ColorListTextView">
-        <item name="android:textColor">@color/list_item_text_states</item>
+        <item name="android:textColor">@color/list_element_text_states</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 
 
     <style name="ColorListCircle">
-        <item name="android:background">@drawable/color_list_circle_item_shape</item>
+        <item name="android:background">@drawable/color_list_circle_element_shape</item>
     </style>
 
     <style name="MainActivityFab">
@@ -47,7 +47,7 @@
         <item name="android:tint">@android:color/white</item>
     </style>
 
-    <style name="AddColoredElemBtn">
+    <style name="AddColoredElementButton">
         <item name="android:background">@color/design_default_color_primary</item>
         <item name="android:textColor">@android:color/primary_text_dark</item>
     </style>

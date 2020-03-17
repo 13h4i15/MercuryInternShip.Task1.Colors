@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect
-class ColorListElem {
+final class ColorListElement {
     private int color, number;
 
     @JsonCreator
-    public ColorListElem(@JsonProperty("color") int color, @JsonProperty("number") int number) {
+    public ColorListElement(@JsonProperty("color") int color, @JsonProperty("number") int number) {
         this.color = color;
         this.number = number;
     }
@@ -18,19 +18,11 @@ class ColorListElem {
         return color;
     }
 
-    public void setColor(int color) {
-        this.color = color;
-    }
-
     public int getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public enum ItemColorState {
+    public enum ElementColorState {
         RED(R.color.red, R.string.red_color_name),
         ORANGE(R.color.orange, R.string.orange_color_name),
         YELLOW(R.color.yellow, R.string.yellow_color_name),
@@ -43,7 +35,7 @@ class ColorListElem {
         private final int colorId;
         private final int colorName;
 
-        ItemColorState(int colorId, int colorName) {
+        ElementColorState(int colorId, int colorName) {
             this.colorId = colorId;
             this.colorName = colorName;
         }
@@ -54,14 +46,6 @@ class ColorListElem {
 
         public int getColorName() {
             return colorName;
-        }
-
-        private static int getColorStatesSize() {
-            return ItemColorState.values().length;
-        }
-
-        public static ItemColorState getColorByPosition(int position) {
-            return ItemColorState.values()[position % getColorStatesSize()];
         }
     }
 }
