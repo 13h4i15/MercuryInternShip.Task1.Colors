@@ -1,5 +1,6 @@
 package com.internship.colors;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -12,6 +13,9 @@ import android.widget.RadioGroup;
 
 public class ColorElemCreateActivity extends AppCompatActivity {
     private static final String NUMBER_INDEX_EXTRA = "index";
+    private static final String SELECTED_RADIO_POSITION = "selected";
+
+    private RadioGroup radioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,25 +30,40 @@ public class ColorElemCreateActivity extends AppCompatActivity {
         int elemNumber = extraDataIntent.getIntExtra(NUMBER_INDEX_EXTRA, 0);
         getSupportActionBar().setTitle(this.getString(R.string.list_item_text_pattern, elemNumber));
 
-        RadioGroup radioGroup = findViewById(R.id.select_color_radio_group);
+        int selectedPosition = -1;
+        if(savedInstanceState != null) {
+            selectedPosition = savedInstanceState.getInt(SELECTED_RADIO_POSITION);
+        }
+
+
+        radioGroup = findViewById(R.id.select_color_radio_group);
         for (ColorListElem.ItemColorState i : ColorListElem.ItemColorState.values()) {
             RadioButton radioButton = new RadioButton(this);
             radioButton.setLayoutParams(new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT));
             radioButton.setBackgroundColor(ContextCompat.getColor(this, i.getColorId()));
-            radioButton.setText(i.toString());
+            radioButton.setText(getString(i.getColorName()).toUpperCase());
+            radioButton.setId(i.getColorId());
             radioGroup.addView(radioButton);
         }
+
+        if(selectedPosition > -1) {
+            radioGroup.check(selectedPosition);
+        }
+
 
         Button button = findViewById(R.id.add_color_elem_btn);
         button.setOnClickListener(v -> {
             Intent intent = new Intent();
-            int checkedColor = ColorListElem.ItemColorState.getColorByPosition((int) radioGroup.getCheckedRadioButtonId() - 1).getColorId();
+            int checkedColor = radioGroup.getCheckedRadioButtonId();
             intent.putExtra("color", checkedColor);
             setResult(1, intent);
             finish();
         });
-
-
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(SELECTED_RADIO_POSITION, radioGroup.getCheckedRadioButtonId());
+        super.onSaveInstanceState(outState);
+    }
 }

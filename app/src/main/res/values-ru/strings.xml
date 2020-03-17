@@ -7,4 +7,12 @@
     <string name="dialog_yes_answer">Да</string>
     <string name="dialog_no_answer">Нет</string>
     <string name="add_colored_elem">Добавить</string>
+    <string name="red_color_name">Красный</string>
+    <string name="orange_color_name">Оранжевый</string>
+    <string name="yellow_color_name">Жёлтый</string>
+    <string name="green_color_name">Зелёный</string>
+    <string name="blue_color_name">Голубой</string>
+    <string name="navy_blue_color_name">Синий</string>
+    <string name="lilac_color_name">Фиолетовый</string>
+    <string name="transparent_color_name">Прозрачный</string>
 </resources>

@@ -6,4 +6,12 @@
     <string name="dialog_yes_answer">Yes</string>
     <string name="dialog_no_answer">No</string>
     <string name="add_colored_elem">Add</string>
+    <string name="red_color_name">Red</string>
+    <string name="orange_color_name">Orange</string>
+    <string name="yellow_color_name">Yellow</string>
+    <string name="green_color_name">Green</string>
+    <string name="blue_color_name">Blue</string>
+    <string name="navy_blue_color_name">Navy blue</string>
+    <string name="lilac_color_name">Lilac</string>
+    <string name="transparent_color_name">Transparent</string>
 </resources>
