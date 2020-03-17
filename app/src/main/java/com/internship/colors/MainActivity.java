@@ -1,5 +1,6 @@
 package com.internship.colors;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
+    private static final int ADD_ELEMENT_REQUEST_CODE = 1;
     private static final String NUMBER_INDEX_EXTRA = "index";
     private static final String SELECTED_COLOR_EXTRA = "color";
 
@@ -55,32 +57,32 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(v -> {
             fab.setClickable(false); //with this you can't make multy-click
             Intent createElementIntent = new Intent(this, ColorElemCreateActivity.class);
-            createElementIntent.putExtra(NUMBER_INDEX_EXTRA, getLastElementNumber() + 1);
-            startActivityForResult(createElementIntent, 1);
+            createElementIntent.putExtra(NUMBER_INDEX_EXTRA, getNumberForNewElement() + 1);
+            startActivityForResult(createElementIntent, ADD_ELEMENT_REQUEST_CODE);
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (data == null) return;
-        int newListElementColor = data.getIntExtra(SELECTED_COLOR_EXTRA, 0);
-        colorList.add(new ColorListElement(newListElementColor, getLastElementNumber() + 1));
-        colorsListRecyclerAdapter.notifyDataSetChanged();
-
-        //You need to save state after any change quickly, in case app's crash
-        try {
-            ColorListJsonLoader.writeJsonInFile(getFilesDir(), colorList);
-        } catch (IOException ignore) {
+        if (requestCode == ADD_ELEMENT_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                int newListElementColor = data.getIntExtra(SELECTED_COLOR_EXTRA, 0);
+                colorsListRecyclerAdapter.addColorElement(new ColorListElement(newListElementColor, getNumberForNewElement() + 1));
+                try {
+                    ColorListJsonLoader.writeJsonInFile(getFilesDir(), colorList);
+                } catch (IOException ignore) {
+                }
+            }
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private int getLastElementNumber() {
+    private int getNumberForNewElement() {
         if (colorList.size() != 0) {
-            return colorList.get(colorList.size() - 1).getNumber();
+            return colorList.get(colorList.size() - 1).getNumber() + 1;
         }
-        return -1;
+        return 0;
     }
 
     @Override

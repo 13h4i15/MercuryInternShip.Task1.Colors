@@ -56,8 +56,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
             builder.setMessage(parent.getContext().getString(R.string.dialog_delete_question, currentListElement.getNumber()));
 
             builder.setPositiveButton(parent.getContext().getString(R.string.dialog_yes_answer), (dialog, which) -> {
-                colorList.remove(recyclerViewHolder.getLayoutPosition());
-                notifyDataSetChanged();
+                deleteColorElement(recyclerViewHolder.getLayoutPosition());
 
                 //You need to save state after any change quickly, in case app's crash
                 try {
@@ -79,6 +78,16 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         });
 
         return recyclerViewHolder;
+    }
+
+    public void addColorElement(ColorListElement element){
+        colorList.add(element);
+        notifyDataSetChanged();
+    }
+
+    public void deleteColorElement(int index){
+        colorList.remove(index);
+        notifyDataSetChanged();
     }
 
     @Override
