@@ -3,8 +3,6 @@ package com.internship.colors;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
@@ -14,7 +12,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +19,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
     private static final String NUMBER_INDEX_EXTRA = "index";
-    private static final String SAVE_FILE_NAME = "coloredListSave.json";
     private static final String SELECTED_COLOR_EXTRA = "color";
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
-    private List<ColorListElement> colorsList;
+    private List<ColorListElement> colorList;
     private FloatingActionButton fab;
 
     @Override
@@ -37,14 +33,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        File path = getFilesDir();
-        File file = new File(path, SAVE_FILE_NAME);
-        ObjectMapper objectMapper = new ObjectMapper();
-
         try {
-            colorsList = objectMapper.readValue(file, new TypeReference<List<ColorListElement>>() {});
+            colorList = ColorListJsonLoader.readJsonFromFile(getFilesDir());
         } catch (IOException ignore) {
-            colorsList = new ArrayList<>();
+            colorList = new ArrayList<>();
         }
 
         RecyclerView recyclerView = findViewById(R.id.colors_list_recycler);
@@ -54,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             selectedPosition = savedInstanceState.getInt(POSITION_INDEX);
         }
 
-        colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(colorsList, selectedPosition);
+        colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(colorList, selectedPosition);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(colorsListRecyclerAdapter);
@@ -72,15 +64,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (data == null) return;
         int newListElementColor = data.getIntExtra(SELECTED_COLOR_EXTRA, 0);
-        colorsList.add(new ColorListElement(newListElementColor, getLastElementNumber() + 1));
+        colorList.add(new ColorListElement(newListElementColor, getLastElementNumber() + 1));
         colorsListRecyclerAdapter.notifyDataSetChanged();
 
         //You need to save state after any change quickly, in case app's crash
-        File path = getFilesDir();
-        File file = new File(path, SAVE_FILE_NAME);
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            objectMapper.writeValue(file, colorsList);
+            ColorListJsonLoader.writeJsonInFile(getFilesDir(), colorList);
         } catch (IOException ignore) {
         }
 
@@ -88,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int getLastElementNumber() {
-        if (colorsList.size() != 0) {
-            return colorsList.get(colorsList.size() - 1).getNumber();
+        if (colorList.size() != 0) {
+            return colorList.get(colorList.size() - 1).getNumber();
         }
         return -1;
     }
