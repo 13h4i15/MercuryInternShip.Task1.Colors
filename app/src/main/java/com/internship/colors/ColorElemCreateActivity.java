@@ -14,9 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 public class ColorElemCreateActivity extends AppCompatActivity {
-    private static final String NUMBER_INDEX_EXTRA = "index";
     private static final String SELECTED_RADIO_POSITION = "selected";
-    private static final String SELECTED_COLOR_EXTRA = "color";
 
 
     private RadioGroup radioGroup;
@@ -31,7 +29,7 @@ public class ColorElemCreateActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         Intent extraDataIntent = getIntent();
-        int elementNumber = extraDataIntent.getIntExtra(NUMBER_INDEX_EXTRA, 0);
+        int elementNumber = extraDataIntent.getIntExtra(Constants.NUMBER_INDEX_EXTRA, 0);
         getSupportActionBar().setTitle(getString(R.string.list_item_text_pattern, elementNumber));
 
         radioGroup = findViewById(R.id.select_color_radio_group);
@@ -57,7 +55,7 @@ public class ColorElemCreateActivity extends AppCompatActivity {
 
         button.setOnClickListener(v -> {
             Intent intent = new Intent();
-            intent.putExtra(SELECTED_COLOR_EXTRA, radioGroup.getCheckedRadioButtonId());
+            intent.putExtra(Constants.SELECTED_COLOR_EXTRA, radioGroup.getCheckedRadioButtonId());
             setResult(Activity.RESULT_OK, intent);
             finish();
         });

@@ -2,9 +2,9 @@ package com.internship.colors;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -24,13 +24,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
+    private static final String DIALOG_ALIVE = "dialog";
     private static final int ADD_ELEMENT_REQUEST_CODE = 1;
-    private static final String NUMBER_INDEX_EXTRA = "index";
-    private static final String SELECTED_COLOR_EXTRA = "color";
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
     private FloatingActionButton fab;
-    List<ColorListElement> colorList;
+    private List<ColorListElement> colorList;
+    private boolean isDialogAlive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +40,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*try {
-            ColorListJsonLoader.writeJsonInFile(context.getFilesDir(), colorList);
-        } catch (IOException ignore) {
-        }*/
-
         RecyclerView recyclerView = findViewById(R.id.colors_list_recycler);
 
         int selectedPosition = -1;
+        isDialogAlive = false;
         if (savedInstanceState != null) {
             selectedPosition = savedInstanceState.getInt(POSITION_INDEX);
+            isDialogAlive = savedInstanceState.getBoolean(DIALOG_ALIVE);
         }
 
         try {
@@ -70,35 +67,48 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(v -> {
             fab.setClickable(false); //with this you can't make multy-click
             Intent createElementIntent = new Intent(this, ColorElemCreateActivity.class);
-            createElementIntent.putExtra(NUMBER_INDEX_EXTRA, colorsListRecyclerAdapter.getNumberForNewElement());
+            createElementIntent.putExtra(Constants.NUMBER_INDEX_EXTRA, colorsListRecyclerAdapter.getNumberForNewElement());
             startActivityForResult(createElementIntent, ADD_ELEMENT_REQUEST_CODE);
         });
+
+
+        if (isDialogAlive) {
+            showDialogToDelete(selectedPosition);
+        }
     }
 
-    public class CustomBroadcastReceiver extends BroadcastReceiver{
+    public class CustomBroadcastReceiver extends BroadcastReceiver {
         public static final String ACTION = "ACTION";
+
         @Override
         public void onReceive(Context context, Intent intent) {
-            int test = intent.getIntExtra("extra", 0);
+            int position = intent.getIntExtra("extra", 0);
+            showDialogToDelete(position);
 
-            int currentListElement = colorList.get(test).getNumber();
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage(context.getString(R.string.dialog_delete_question, currentListElement));
-
-            builder.setPositiveButton(context.getString(R.string.dialog_yes_answer), (dialog, which) -> {
-                colorsListRecyclerAdapter.deleteColorElement(test, context);
-            });
-
-            builder.setNegativeButton(context.getString(R.string.dialog_no_answer), (dialog, which) -> {
-                colorsListRecyclerAdapter.setSelectedPosition(-1);
-                colorsListRecyclerAdapter.notifyDataSetChanged();
-            });
-            builder.setOnDismissListener(dialog -> {
-                colorsListRecyclerAdapter.setSelectedPosition(-1);
-                colorsListRecyclerAdapter.notifyDataSetChanged();
-            });
-            builder.create().show();
         }
+    }
+
+    private void showDialogToDelete(int position) {
+        isDialogAlive = true;
+        int currentListElement = colorList.get(position).getNumber();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.dialog_delete_question, currentListElement));
+
+        builder.setPositiveButton(getString(R.string.dialog_yes_answer), (dialog, which) -> {
+            colorsListRecyclerAdapter.deleteColorElement(position, this);
+            isDialogAlive = false;
+        });
+
+        builder.setNegativeButton(getString(R.string.dialog_no_answer), (dialog, which) -> {
+            colorsListRecyclerAdapter.unselectElement();
+            isDialogAlive = false;
+        });
+        builder.setOnDismissListener(dialog -> {
+            colorsListRecyclerAdapter.unselectElement();
+            isDialogAlive = false;
+        });
+        Dialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -106,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         if (data == null) return;
         if (requestCode == ADD_ELEMENT_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                int newListElementColor = data.getIntExtra(SELECTED_COLOR_EXTRA, 0);
+                int newListElementColor = data.getIntExtra(Constants.SELECTED_COLOR_EXTRA, 0);
                 colorsListRecyclerAdapter.addColorElement(new ColorListElement(newListElementColor, colorsListRecyclerAdapter.getNumberForNewElement()), this);
             }
         }
@@ -117,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(POSITION_INDEX, colorsListRecyclerAdapter.getSelectedPosition());
+        outState.putBoolean(DIALOG_ALIVE, isDialogAlive);
         super.onSaveInstanceState(outState);
     }
 

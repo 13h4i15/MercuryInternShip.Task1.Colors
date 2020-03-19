@@ -1,6 +1,5 @@
 package com.internship.colors;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -17,12 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
@@ -53,7 +46,6 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         });
 
 
-
         view.setOnLongClickListener(v -> {
             view.setSelected(true);
             int lastSelectedPosition = getSelectedPosition();
@@ -72,7 +64,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         return recyclerViewHolder;
     }
 
-    public void addColorElement(ColorListElement element, Context context){
+    public void addColorElement(ColorListElement element, Context context) {
         colorList.add(element);
         notifyDataSetChanged();
         try {
@@ -81,7 +73,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         }
     }
 
-    public void deleteColorElement(int index, Context context){
+    public void deleteColorElement(int index, Context context) {
         colorList.remove(index);
         notifyDataSetChanged();
         try {
@@ -90,7 +82,12 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         }
     }
 
-    public int getNumberForNewElement(){
+    public void unselectElement() {
+        setSelectedPosition(-1);
+        notifyDataSetChanged();
+    }
+
+    public int getNumberForNewElement() {
         if (getItemCount() != 0) {
             return colorList.get(colorList.size() - 1).getNumber() + 1;
         }
@@ -109,7 +106,7 @@ class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerA
         return selectedPosition;
     }
 
-    public void setSelectedPosition(int selectedPosition){
+    public void setSelectedPosition(int selectedPosition) {
         this.selectedPosition = selectedPosition;
     }
 
