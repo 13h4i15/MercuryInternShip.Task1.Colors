@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect
 final class ColorListElement {
-    private int color, number;
+    private final int color, number;
 
     @JsonCreator
     public ColorListElement(@JsonProperty("color") int color, @JsonProperty("number") int number) {

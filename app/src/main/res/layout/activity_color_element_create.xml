@@ -23,9 +23,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="100">
-
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <RadioGroup
             android:id="@+id/select_color_radio_group"
             android:layout_width="match_parent"
@@ -37,7 +36,6 @@
         style="@style/AddColoredElementButton"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_weight="0.1"
         android:text="@string/add_colored_elem"
         android:visibility="gone" />
 

@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
+final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
     private int selectedPosition;
     private final List<ColorListElement> colorList;
 
