@@ -3,6 +3,7 @@ package com.internship.colors;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,24 +15,34 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.PortUnreachableException;
+import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
     private int selectedPosition;
-    private final List<ColorListElement> colorList;
+    private List<ColorListElement> colorList;
+    private File filesDir;
 
-    public ColorsListRecyclerAdapter(List<ColorListElement> colorList, int selectedPosition) {
-        this.colorList = colorList;
+    public ColorsListRecyclerAdapter(Context context, File filesDir, int selectedPosition) {
+        this.filesDir = filesDir;
         this.selectedPosition = selectedPosition;
+        colorList = new ArrayList<>();
+        loadState(context);
     }
 
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.color_list_element_layout, parent, false);
-
         final RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
 
         view.setOnClickListener(v -> {
@@ -53,10 +64,8 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
             notifyItemChanged(lastSelectedPosition);
 
             Intent intent = new Intent();
-            intent.putExtra("extra", recyclerViewHolder.getLayoutPosition());
-            intent.setAction(MainActivity.CustomBroadcastReceiver.ACTION);
+            intent.setAction(MainActivity.CustomBroadcastReceiver.DIALOG_ACTION);
             parent.getContext().sendBroadcast(intent);
-
 
             return true;
         });
@@ -64,22 +73,43 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
         return recyclerViewHolder;
     }
 
-    public void addColorElement(ColorListElement element, Context context) {
-        colorList.add(element);
-        notifyDataSetChanged();
-        try {
-            ColorListJsonLoader.writeJsonInFile(context.getFilesDir(), colorList);
-        } catch (IOException ignore) {
-        }
+
+    public void addColorElement(int colorId, int number) {
+        colorList.add(new ColorListElement(colorId, number));
+        saveState();
     }
 
-    public void deleteColorElement(int index, Context context) {
+    public void deleteColorElement(int index) {
         colorList.remove(index);
+        saveState();
+    }
+
+
+    private void saveState(){
+        Disposable.fromRunnable(() -> {
+            ColorListJsonLoader.writeJsonInFile(filesDir, colorList);
+        }).dispose();
         notifyDataSetChanged();
-        try {
-            ColorListJsonLoader.writeJsonInFile(context.getFilesDir(), colorList);
-        } catch (IOException ignore) {
-        }
+    }
+
+    private void loadState(Context context){
+        Single.fromCallable(() -> ColorListJsonLoader.readJsonFromFile(filesDir))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(v -> {colorList = v;
+                notifyDataSetChanged();
+                showMainFabAction(context);
+                },
+                        v -> {
+                            Log.v("tag", v.toString());
+                            showMainFabAction(context);
+                        });
+    }
+
+    private void showMainFabAction(Context context){
+        Intent intent = new Intent();
+        intent.setAction(MainActivity.CustomBroadcastReceiver.SHOW_FAB_ACTION);
+        context.sendBroadcast(intent);
     }
 
     public void unselectElement() {
@@ -94,6 +124,10 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
         return 0;
     }
 
+    public int getNumberByPosition(int position){
+        return colorList.get(position).getNumber();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         String text = holder.textView.getContext().getString(R.string.list_item_text_pattern, colorList.get(position).getNumber());
@@ -105,6 +139,7 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
     public int getSelectedPosition() {
         return selectedPosition;
     }
+
 
     public void setSelectedPosition(int selectedPosition) {
         this.selectedPosition = selectedPosition;

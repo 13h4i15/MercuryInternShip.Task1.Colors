@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -18,9 +21,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
@@ -29,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
     private FloatingActionButton fab;
-    private List<ColorListElement> colorList;
     private boolean isDialogAlive;
 
     @Override
@@ -49,21 +55,17 @@ public class MainActivity extends AppCompatActivity {
             isDialogAlive = savedInstanceState.getBoolean(DIALOG_ALIVE);
         }
 
-        try {
-            colorList = ColorListJsonLoader.readJsonFromFile(getFilesDir());
-        } catch (IOException ignore) {
-            colorList = new ArrayList<>();
-        }
-        colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(colorList, selectedPosition);
+        fab = findViewById(R.id.fab);
+        colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(this, getFilesDir(), selectedPosition);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(colorsListRecyclerAdapter);
 
         CustomBroadcastReceiver receiver = new CustomBroadcastReceiver();
-        this.registerReceiver(receiver, new IntentFilter(CustomBroadcastReceiver.ACTION));
+        this.registerReceiver(receiver, new IntentFilter(CustomBroadcastReceiver.DIALOG_ACTION));
+        this.registerReceiver(receiver, new IntentFilter(CustomBroadcastReceiver.SHOW_FAB_ACTION));
 
-        fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             fab.setClickable(false); //with this you can't make multy-click
             Intent createElementIntent = new Intent(this, ColorElemCreateActivity.class);
@@ -73,29 +75,37 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (isDialogAlive) {
-            showDialogToDelete(selectedPosition);
+            showDialogToDelete();
         }
     }
 
+
     public class CustomBroadcastReceiver extends BroadcastReceiver {
-        public static final String ACTION = "ACTION";
+        public static final String DIALOG_ACTION = "dialog_action";
+        public static final String SHOW_FAB_ACTION = "show_fag_action";
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            int position = intent.getIntExtra("extra", 0);
-            showDialogToDelete(position);
-
+            switch (intent.getAction()) {
+                case DIALOG_ACTION:
+                    showDialogToDelete();
+                    break;
+                case SHOW_FAB_ACTION:
+                    fab.setVisibility(View.VISIBLE);
+                    break;
+            }
         }
     }
 
-    private void showDialogToDelete(int position) {
+    private void showDialogToDelete() {
         isDialogAlive = true;
-        int currentListElement = colorList.get(position).getNumber();
+        //todo save selected position number as instance state.
+        int currentListElement = colorsListRecyclerAdapter.getNumberByPosition(colorsListRecyclerAdapter.getSelectedPosition());
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.dialog_delete_question, currentListElement));
 
         builder.setPositiveButton(getString(R.string.dialog_yes_answer), (dialog, which) -> {
-            colorsListRecyclerAdapter.deleteColorElement(position, this);
+            colorsListRecyclerAdapter.deleteColorElement(colorsListRecyclerAdapter.getSelectedPosition());
             isDialogAlive = false;
         });
 
@@ -117,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == ADD_ELEMENT_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 int newListElementColor = data.getIntExtra(Constants.SELECTED_COLOR_EXTRA, 0);
-                colorsListRecyclerAdapter.addColorElement(new ColorListElement(newListElementColor, colorsListRecyclerAdapter.getNumberForNewElement()), this);
+                colorsListRecyclerAdapter.addColorElement(newListElementColor, colorsListRecyclerAdapter.getNumberForNewElement());
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
