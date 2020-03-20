@@ -1,21 +1,24 @@
 package com.internship.colors;
 
+import androidx.annotation.ColorRes;
+import androidx.annotation.StringRes;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonAutoDetect
 final class ColorListElement {
-    private final int color, number;
+    private final int colorId, number;
 
     @JsonCreator
-    public ColorListElement(@JsonProperty("color") int color, @JsonProperty("number") int number) {
-        this.color = color;
+    public ColorListElement(@JsonProperty("colorId") int colorId, @JsonProperty("number") int number) {
+        this.colorId = colorId;
         this.number = number;
     }
 
-    public int getColor() {
-        return color;
+    public int getColorId() {
+        return colorId;
     }
 
     public int getNumber() {
@@ -32,20 +35,22 @@ final class ColorListElement {
         LILAC(R.color.lilac, R.string.lilac_color_name),
         BLANK(R.color.transparent, R.string.transparent_color_name);
 
+        @ColorRes
         private final int colorId;
-        private final int colorName;
+        @StringRes
+        private final int colorNameId;
 
-        ElementColorState(int colorId, int colorName) {
+        ElementColorState(int colorId, int colorNameId) {
             this.colorId = colorId;
-            this.colorName = colorName;
+            this.colorNameId = colorNameId;
         }
 
         public int getColorId() {
             return colorId;
         }
 
-        public int getColorName() {
-            return colorName;
+        public int getColorNameId() {
+            return colorNameId;
         }
     }
 }

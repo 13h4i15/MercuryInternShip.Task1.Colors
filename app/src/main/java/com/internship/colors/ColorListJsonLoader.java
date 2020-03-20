@@ -18,7 +18,7 @@ final class ColorListJsonLoader {
         try {
             objectMapper.writeValue(getFullPath(filesDir), data);
         } catch (IOException e) {
-            Log.e("tag", e.toString());
+            Log.e(Constants.LOADING_COLOR_LIST_FILE_ERROR_TAG, e.toString());
         }
     }
 
@@ -27,7 +27,7 @@ final class ColorListJsonLoader {
             return objectMapper.readValue(getFullPath(filesDir), new TypeReference<List<ColorListElement>>() {
             });
         } catch (IOException e) {
-            Log.e("tag", e.toString());
+            Log.e(Constants.LOADING_COLOR_LIST_FILE_ERROR_TAG, e.toString());
             return new ArrayList<>();
         }
     }

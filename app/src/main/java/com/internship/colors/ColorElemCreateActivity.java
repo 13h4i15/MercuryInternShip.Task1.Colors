@@ -36,7 +36,7 @@ public class ColorElemCreateActivity extends AppCompatActivity {
             RadioButton radioButton = new RadioButton(this);
             radioButton.setLayoutParams(new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT));
             radioButton.setBackgroundColor(ContextCompat.getColor(this, i.getColorId()));
-            radioButton.setText(getString(i.getColorName()).toUpperCase());
+            radioButton.setText(getString(i.getColorNameId()).toUpperCase());
             radioButton.setId(i.getColorId());
             radioGroup.addView(radioButton);
         }
@@ -47,15 +47,16 @@ public class ColorElemCreateActivity extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> button.setVisibility(View.VISIBLE));
 
         if (savedInstanceState != null) {
-            int selectedPosition = savedInstanceState.getInt(SELECTED_RADIO_POSITION);
-            if (selectedPosition > -1) {
-                radioGroup.check(selectedPosition);
+            int selectedColor = savedInstanceState.getInt(SELECTED_RADIO_POSITION);
+            if (selectedColor != -1) {
+                radioGroup.check(selectedColor);
             }
         }
 
         button.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.putExtra(Constants.SELECTED_COLOR_EXTRA, radioGroup.getCheckedRadioButtonId());
+            intent.putExtra(Constants.CREATED_ELEMENT_NUMBER_EXTRA, elementNumber);
             setResult(Activity.RESULT_OK, intent);
             finish();
         });

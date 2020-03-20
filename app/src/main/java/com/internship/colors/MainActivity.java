@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
-    private static final String DIALOG_ALIVE = "dialog";
+    private static final String DIALOG_ELEMENT_NUUMBER = "dialog";
     private static final int ADD_ELEMENT_REQUEST_CODE = 1;
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         dialogSelectedNumber = -1;
         if (savedInstanceState != null) {
             selectedPosition = savedInstanceState.getInt(POSITION_INDEX);
-            dialogSelectedNumber = savedInstanceState.getInt(DIALOG_ALIVE);
+            dialogSelectedNumber = savedInstanceState.getInt(DIALOG_ELEMENT_NUUMBER);
         }
 
         colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(this, getFilesDir(), selectedPosition);
@@ -114,8 +114,10 @@ public class MainActivity extends AppCompatActivity {
         if (data == null) return;
         if (requestCode == ADD_ELEMENT_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
+
                 int newListElementColor = data.getIntExtra(Constants.SELECTED_COLOR_EXTRA, ColorListElement.ElementColorState.values().length - 1);
-                colorsListRecyclerAdapter.addColorElement(newListElementColor, colorsListRecyclerAdapter.getNumberForNewElement());
+                int elementNumber = data.getIntExtra(Constants.CREATED_ELEMENT_NUMBER_EXTRA, colorsListRecyclerAdapter.getNumberForNewElement());
+                colorsListRecyclerAdapter.addColorElement(newListElementColor, elementNumber);
             }
         }
 
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(POSITION_INDEX, colorsListRecyclerAdapter.getSelectedPosition());
-        outState.putInt(DIALOG_ALIVE, dialogSelectedNumber);
+        outState.putInt(DIALOG_ELEMENT_NUUMBER, dialogSelectedNumber);
 
         super.onSaveInstanceState(outState);
     }

@@ -76,8 +76,13 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
     }
 
     public void deleteColorElement(int index) {
-        colorList.remove(index);
-        saveState();
+        if (index < colorList.size()) {
+            colorList.remove(index);
+            saveState();
+        }else {
+            //Toast.makeText();
+        }
+
     }
 
     public void unselectElement() {
@@ -90,10 +95,7 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
     }
 
     public int getNumberForNewElement() {  // returns new name's number for new element
-        if (getItemCount() != 0) {
-            return getNumberByPosition(colorList.size() - 1) + 1;
-        }
-        return 0; // returns 0 number if list is empty
+        return getItemCount() != 0 ? getNumberByPosition(colorList.size() - 1) + 1 : 0;  // returns 0 number if list is empty
     }
 
     public int getSelectedPosition() {
@@ -135,7 +137,7 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         String text = holder.textView.getContext().getString(R.string.list_item_text_pattern, colorList.get(position).getNumber());
         holder.textView.setText(text);
-        holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.image.getContext(), colorList.get(position).getColor())));
+        holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.image.getContext(), colorList.get(position).getColorId())));
         holder.itemView.setSelected(position == getSelectedPosition());
     }
 
