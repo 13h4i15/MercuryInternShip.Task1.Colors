@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_nyan_cat_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ColorElemCreateActivity"></activity>
+        <activity android:name=".ColorElemCreateActivity"/>
         <activity
             android:name=".SplashScreenActivity"
             android:theme="@style/SplashTheme">

@@ -16,7 +16,6 @@ import android.widget.RadioGroup;
 public class ColorElemCreateActivity extends AppCompatActivity {
     private static final String SELECTED_RADIO_POSITION = "selected";
 
-
     private RadioGroup radioGroup;
 
     @Override
@@ -44,6 +43,7 @@ public class ColorElemCreateActivity extends AppCompatActivity {
 
         Button button = findViewById(R.id.add_color_element_button);
 
+        // makes button visible only if color is selected
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> button.setVisibility(View.VISIBLE));
 
         if (savedInstanceState != null) {
