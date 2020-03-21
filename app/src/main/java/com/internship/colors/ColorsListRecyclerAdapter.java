@@ -1,6 +1,5 @@
 package com.internship.colors;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +20,7 @@ import java.util.List;
 final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
     private int selectedPosition;
     private final List<ColorListElement> colorList;
+    private View.OnLongClickListener onLongClickListener;
 
     public ColorsListRecyclerAdapter(int selectedPosition) {
         this.selectedPosition = selectedPosition;
@@ -46,19 +46,18 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
         });
 
         view.setOnLongClickListener(v -> {
-            view.setSelected(true);
+            v.setSelected(true);
             int lastSelectedPosition = getSelectedPosition();
             selectedPosition = recyclerViewHolder.getLayoutPosition();
             notifyItemChanged(lastSelectedPosition);
-
-            Intent intent = new Intent();  //call dialog creation in main activity
-            intent.setAction(Constants.DIALOG_ACTION);
-            parent.getContext().sendBroadcast(intent);
-
+            onLongClickListener.onLongClick(v);
             return true;
         });
-
         return recyclerViewHolder;
+    }
+
+    public void setOnLongClickListener(View.OnLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
     }
 
     public void addColorElement(int colorId, int number) {

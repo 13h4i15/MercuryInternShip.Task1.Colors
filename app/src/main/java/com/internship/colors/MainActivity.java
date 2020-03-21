@@ -3,10 +3,7 @@ package com.internship.colors;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -59,13 +56,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(selectedPosition);
-        CustomBroadcastReceiver receiver = new CustomBroadcastReceiver();
-        this.registerReceiver(receiver, new IntentFilter(Constants.DIALOG_ACTION));  // catches dialog's invokes
-        this.registerReceiver(receiver, new IntentFilter(Constants.SHOW_FAB_ACTION));  // catches invoke to show fab
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(colorsListRecyclerAdapter);
+
+        colorsListRecyclerAdapter.setOnLongClickListener(v -> {
+            showDialogToDelete();
+            return true;
+        });
 
         loadingDisposable = loadState();
 
@@ -78,17 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (dialogSelectedNumber != -1) {  // need to call dialog if it was closed by settings change
             showDialogToDelete();
-        }
-    }
-
-    public class CustomBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case Constants.DIALOG_ACTION:
-                    showDialogToDelete();
-                    break;
-            }
         }
     }
 
@@ -114,9 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(2, TimeUnit.SECONDS)
                 .subscribe(v -> {
-                            if (!v) {
-                                colorsListRecyclerAdapter.fillElementsListWithData(oldVersion);
-                            }
+                            if (!v) colorsListRecyclerAdapter.fillElementsListWithData(oldVersion);
                         },
                         v -> {
                             colorsListRecyclerAdapter.fillElementsListWithData(oldVersion);
