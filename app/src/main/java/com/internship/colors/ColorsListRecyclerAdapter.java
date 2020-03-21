@@ -1,6 +1,5 @@
 package com.internship.colors;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.util.Log;
@@ -15,25 +14,17 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
     private int selectedPosition;
     private final List<ColorListElement> colorList;
-    private final File filesDir;
 
-    public ColorsListRecyclerAdapter(Context context, File filesDir, int selectedPosition) {
-        this.filesDir = filesDir;
+    public ColorsListRecyclerAdapter(int selectedPosition) {
         this.selectedPosition = selectedPosition;
         colorList = new ArrayList<>();  // creates empty page and loads list from file
-        loadState(context);  // loads list, if its empty, it stars empty list adepter
     }
 
     @NonNull
@@ -72,17 +63,16 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
 
     public void addColorElement(int colorId, int number) {
         colorList.add(new ColorListElement(colorId, number));
-        saveState();
+        notifyDataSetChanged();
     }
 
     public void deleteColorElement(int index) {
-        if (index < colorList.size()) {
-            colorList.remove(index);
-            saveState();
-        }else {
-            //Toast.makeText();
+        try {
+            colorList.remove(colorList.get(index));
+            unselectElement();
+        } catch (IndexOutOfBoundsException e) {
+            Log.e(Constants.DELETING_ELEMENT_FROM_LIST_ERROR_TAG, e.toString());
         }
-
     }
 
     public void unselectElement() {
@@ -102,35 +92,13 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
         return selectedPosition;
     }
 
-    private void saveState() {
-        Disposable.fromRunnable(() -> ColorListJsonLoader.writeJsonInFile(filesDir, colorList));
-        notifyDataSetChanged();
-    }
-
-    private void loadState(Context context) {  // fills empty list with saved elements
-        Single.fromCallable(() -> ColorListJsonLoader.readJsonFromFile(filesDir))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(v -> {
-                            fillElementsListWithData(v);
-                            notifyDataSetChanged();
-                            showMainFabAction(context);
-                        },
-                        v -> {
-                            Log.e(Constants.LOADING_COLOR_LIST_FILE_ERROR_TAG, v.toString());
-                            showMainFabAction(context);
-                        });
-    }
-
-    private void fillElementsListWithData(List<ColorListElement> listData) {
+    public void fillElementsListWithData(List<ColorListElement> listData) {
+        colorList.clear();
         colorList.addAll(listData);
     }
 
-    private void showMainFabAction(Context context) {  // invokes main activity's fab to make it visible
-        // we need block fab before data will be prepared
-        Intent intent = new Intent();
-        intent.setAction(Constants.SHOW_FAB_ACTION);
-        context.sendBroadcast(intent);
+    public List<ColorListElement> getColorList() {
+        return new ArrayList<>(colorList);
     }
 
     @Override

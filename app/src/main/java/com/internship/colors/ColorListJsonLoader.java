@@ -11,14 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 final class ColorListJsonLoader {
-    private static final String SAVE_FILE_NAME = "coloredListSave.json";
+    private static final String SAVE_FILE_NAME = "coloredListSaveFile.json";
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static void writeJsonInFile(File filesDir, List<ColorListElement> data) {
+    public static boolean writeJsonInFile(File filesDir, List<ColorListElement> data) {
         try {
             objectMapper.writeValue(getFullPath(filesDir), data);
+            return true;
         } catch (IOException e) {
             Log.e(Constants.LOADING_COLOR_LIST_FILE_ERROR_TAG, e.toString());
+            return false;
         }
     }
 
