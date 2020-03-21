@@ -110,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         savingDisposable = Single.fromCallable(() -> ColorListJsonLoader.writeJsonInFile(getFilesDir(), colorsListRecyclerAdapter.getColorList()))
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .timeout(2, TimeUnit.SECONDS)
                 .subscribe(v -> {
                             if (!v) {
@@ -119,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
                         },
                         v -> {
                             colorsListRecyclerAdapter.fillElementsListWithData(oldVersion);
-                            Toast.makeText(this, v.toString(), Toast.LENGTH_LONG).show();//todo
-                            Log.e(Constants.LOADING_COLOR_LIST_FILE_ERROR_TAG, v.toString());
+                            Toast.makeText(this, getString(R.string.saving_colored_list_error_toast), Toast.LENGTH_SHORT).show();
+                            Log.e(Constants.SAVING_COLOR_LIST_FILE_ERROR_TAG, v.toString());
                         });
     }
 
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                             fab.setVisibility(View.VISIBLE);
                         },
                         v -> {
-                            Toast.makeText(this, v.toString(), Toast.LENGTH_LONG).show();//todo
+                            Toast.makeText(this, getString(R.string.loading_colored_list_error_toast), Toast.LENGTH_SHORT).show();
                             Log.e(Constants.LOADING_COLOR_LIST_FILE_ERROR_TAG, v.toString());
                             fab.setVisibility(View.VISIBLE);
                         });

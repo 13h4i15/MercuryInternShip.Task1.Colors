@@ -14,4 +14,6 @@
     <string name="navy_blue_color_name">Navy blue</string>
     <string name="lilac_color_name">Lilac</string>
     <string name="transparent_color_name">Transparent</string>
+    <string name="saving_colored_list_error_toast">Error occurred while saving list.</string>
+    <string name="loading_colored_list_error_toast">Error occurred while loading list.</string>
 </resources>
