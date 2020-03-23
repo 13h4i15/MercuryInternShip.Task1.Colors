@@ -173,15 +173,18 @@ public class MainActivity extends AppCompatActivity {
             isDialogVisible = false;
         });
         builder.setNegativeButton(getString(R.string.dialog_no_answer), (dialog, which) -> {
-            colorsListRecyclerAdapter.unselectElement();
-            isDialogVisible = false;
+            unselectAndDeleteElement();
         });
         builder.setOnDismissListener(dialog -> {
-            colorsListRecyclerAdapter.unselectElement();
-            isDialogVisible = false;
+            unselectAndDeleteElement();
         });
 
         Dialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void unselectAndDeleteElement(){
+        colorsListRecyclerAdapter.unselectElement();
+        isDialogVisible = false;
     }
 }
