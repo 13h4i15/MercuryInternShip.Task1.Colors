@@ -145,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
         return Single.fromCallable(() -> ColorListJsonLoader.readJsonFromFile(getFilesDir()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .timeout(2, TimeUnit.SECONDS)
                 .subscribe(loadedColorList -> {
                             colorsListRecyclerAdapter.setColorElements(loadedColorList);
                             colorsListRecyclerAdapter.notifyDataSetChanged();
