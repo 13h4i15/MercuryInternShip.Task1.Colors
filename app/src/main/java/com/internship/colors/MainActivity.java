@@ -29,13 +29,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
-    private static final String DIALOG_ELEMENT_NUMBER = "dialog";
+    private static final String DIALOG_VISIBLE = "dialog";
     private static final String SAVING_COLOR_LIST_FILE_ERROR_TAG = "list_saving_error";
     private static final int ADD_ELEMENT_REQUEST_CODE = 1;
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
     private FloatingActionButton fab;
-    private int dialogSelectedNumber;
+    private boolean isDialogVisible;
     private Disposable loadingDisposable, savingDisposable;
 
     @Override
@@ -50,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
 
         int selectedPosition = -1;
-        dialogSelectedNumber = -1;
+        isDialogVisible = false;
         if (savedInstanceState != null) {
             selectedPosition = savedInstanceState.getInt(POSITION_INDEX);
-            dialogSelectedNumber = savedInstanceState.getInt(DIALOG_ELEMENT_NUMBER);
+            isDialogVisible = savedInstanceState.getBoolean(DIALOG_VISIBLE);
         }
 
         colorsListRecyclerAdapter = new ColorsListRecyclerAdapter(selectedPosition);
@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(colorsListRecyclerAdapter);
 
         colorsListRecyclerAdapter.setOnLongClickListener(v -> {
-            dialogSelectedNumber = colorsListRecyclerAdapter.getNumberByPosition(colorsListRecyclerAdapter.getSelectedPosition());
             showDialogToDelete();
             return true;
         });
@@ -94,8 +93,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(POSITION_INDEX, colorsListRecyclerAdapter.getSelectedPosition());
-        outState.putInt(DIALOG_ELEMENT_NUMBER, dialogSelectedNumber);
-
+        outState.putBoolean(DIALOG_VISIBLE, isDialogVisible);
         super.onSaveInstanceState(outState);
     }
 
@@ -152,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                             colorsListRecyclerAdapter.setColorElements(loadedColorList);
                             colorsListRecyclerAdapter.notifyDataSetChanged();
                             fab.setVisibility(View.VISIBLE);
-                            if (dialogSelectedNumber != -1) {  // need to call dialog if it was closed by settings change
+                            if (isDialogVisible) {  // need to call dialog if it was closed by settings change
                                 showDialogToDelete();
                             }
                         },
@@ -165,20 +163,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void showDialogToDelete() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.dialog_delete_question, dialogSelectedNumber));
+        isDialogVisible = true;
+        int selectedDialogNumber = colorsListRecyclerAdapter.getNumberByPosition(colorsListRecyclerAdapter.getSelectedPosition());
+        builder.setMessage(getString(R.string.dialog_delete_question, selectedDialogNumber));
 
         builder.setPositiveButton(getString(R.string.dialog_yes_answer), (dialog, which) -> {
-            int selectedPosition = colorsListRecyclerAdapter.getSelectedPosition();
-            deleteAndSaveState(selectedPosition);
-            dialogSelectedNumber = -1;
+            deleteAndSaveState(colorsListRecyclerAdapter.getSelectedPosition());
+            isDialogVisible = false;
         });
         builder.setNegativeButton(getString(R.string.dialog_no_answer), (dialog, which) -> {
             colorsListRecyclerAdapter.unselectElement();
-            dialogSelectedNumber = -1;
+            isDialogVisible = false;
         });
         builder.setOnDismissListener(dialog -> {
             colorsListRecyclerAdapter.unselectElement();
-            dialogSelectedNumber = -1;
+            isDialogVisible = false;
         });
 
         Dialog dialog = builder.create();
