@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
@@ -35,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
     private FloatingActionButton fab;
-    private boolean isDialogVisible;
     private Disposable loadingDisposable, savingDisposable;
+    private boolean isDialogVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void unselectAndDeleteElement(){
+    private void unselectAndDeleteElement() {
         colorsListRecyclerAdapter.unselectElement();
         isDialogVisible = false;
     }
