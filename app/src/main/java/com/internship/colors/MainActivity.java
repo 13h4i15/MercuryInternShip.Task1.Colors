@@ -91,10 +91,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putInt(POSITION_INDEX, colorsListRecyclerAdapter.getSelectedPosition());
-        outState.putBoolean(DIALOG_VISIBLE, isDialogVisible);
-        super.onSaveInstanceState(outState);
+    protected void onResume() {
+        super.onResume();
+        fab.setClickable(true);
     }
 
     @Override
@@ -105,9 +104,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        fab.setClickable(true);
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(POSITION_INDEX, colorsListRecyclerAdapter.getSelectedPosition());
+        outState.putBoolean(DIALOG_VISIBLE, isDialogVisible);
+        super.onSaveInstanceState(outState);
     }
 
     private void addAndSaveState(int newListElementColor, int elementNumber) {
