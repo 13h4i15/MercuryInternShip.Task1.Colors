@@ -142,12 +142,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Disposable loadState() {  // fills empty list with saved elements
+        if (loadingDisposable != null && !loadingDisposable.isDisposed()) {
+            loadingDisposable.dispose();
+        }
         return Single.fromCallable(() -> ColorListJsonLoader.readJsonFromFile(getFilesDir()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(loadedColorList -> {
                             colorsListRecyclerAdapter.setColorElements(loadedColorList);
-                            colorsListRecyclerAdapter.notifyDataSetChanged();
                             fab.setVisibility(View.VISIBLE);
                             if (isDialogVisible) {  // need to call dialog if it was closed by settings change
                                 showDialogToDelete();

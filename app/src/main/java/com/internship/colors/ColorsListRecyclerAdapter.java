@@ -108,6 +108,7 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
     public void setColorElements(List<ColorListElement> listData) {
         colorList.clear();
         colorList.addAll(listData);
+        notifyDataSetChanged();
     }
 
     public List<ColorListElement> getColorList() {
