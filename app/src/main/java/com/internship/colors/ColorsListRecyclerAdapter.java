@@ -18,13 +18,14 @@ import java.util.List;
 
 
 final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRecyclerAdapter.RecyclerViewHolder> {
+    private static final String DELETING_ELEMENT_FROM_LIST_ERROR_TAG = "element_deleting_error";
+
     private int selectedPosition;
-    private final List<ColorListElement> colorList;
     private View.OnLongClickListener onLongClickListener;
+    private final List<ColorListElement> colorList = new ArrayList<>();
 
     public ColorsListRecyclerAdapter(int selectedPosition) {
         this.selectedPosition = selectedPosition;
-        colorList = new ArrayList<>();  // creates empty page and loads list from file
     }
 
     @NonNull
@@ -56,6 +57,19 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
         return recyclerViewHolder;
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
+        String text = holder.textView.getContext().getString(R.string.list_item_text_pattern, colorList.get(position).getNumber());
+        holder.textView.setText(text);
+        holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.image.getContext(), colorList.get(position).getColorId())));
+        holder.itemView.setSelected(position == getSelectedPosition());
+    }
+
+    @Override
+    public int getItemCount() {
+        return colorList.size();
+    }
+
     public void setOnLongClickListener(View.OnLongClickListener onLongClickListener) {
         this.onLongClickListener = onLongClickListener;
     }
@@ -67,10 +81,10 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
 
     public void deleteColorElement(int index) {
         try {
-            colorList.remove(colorList.get(index));
+            colorList.remove(index);
             unselectElement();
         } catch (IndexOutOfBoundsException e) {
-            Log.e(Constants.DELETING_ELEMENT_FROM_LIST_ERROR_TAG, e.toString());
+            Log.e(DELETING_ELEMENT_FROM_LIST_ERROR_TAG, e.toString());
         }
     }
 
@@ -91,26 +105,13 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
         return selectedPosition;
     }
 
-    public void fillElementsListWithData(List<ColorListElement> listData) {
+    public void setColorElements(List<ColorListElement> listData) {
         colorList.clear();
         colorList.addAll(listData);
     }
 
     public List<ColorListElement> getColorList() {
         return new ArrayList<>(colorList);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-        String text = holder.textView.getContext().getString(R.string.list_item_text_pattern, colorList.get(position).getNumber());
-        holder.textView.setText(text);
-        holder.image.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.image.getContext(), colorList.get(position).getColorId())));
-        holder.itemView.setSelected(position == getSelectedPosition());
-    }
-
-    @Override
-    public int getItemCount() {
-        return colorList.size();
     }
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {

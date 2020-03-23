@@ -30,6 +30,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
     private static final String POSITION_INDEX = "position";
     private static final String DIALOG_ELEMENT_NUMBER = "dialog";
+    private static final String SAVING_COLOR_LIST_FILE_ERROR_TAG = "list_saving_error";
     private static final int ADD_ELEMENT_REQUEST_CODE = 1;
 
     private ColorsListRecyclerAdapter colorsListRecyclerAdapter;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(colorsListRecyclerAdapter);
 
         colorsListRecyclerAdapter.setOnLongClickListener(v -> {
+            dialogSelectedNumber = colorsListRecyclerAdapter.getNumberByPosition(colorsListRecyclerAdapter.getSelectedPosition());
             showDialogToDelete();
             return true;
         });
@@ -73,87 +75,6 @@ public class MainActivity extends AppCompatActivity {
             createElementIntent.putExtra(Constants.NUMBER_INDEX_EXTRA, colorsListRecyclerAdapter.getNumberForNewElement());
             startActivityForResult(createElementIntent, ADD_ELEMENT_REQUEST_CODE);
         });
-
-        if (dialogSelectedNumber != -1) {  // need to call dialog if it was closed by settings change
-            showDialogToDelete();
-        }
-    }
-
-    private void addAndSaveState(int newListElementColor, int elementNumber) {
-        final List<ColorListElement> oldVersion = new ArrayList<>(colorsListRecyclerAdapter.getColorList());
-        colorsListRecyclerAdapter.addColorElement(newListElementColor, elementNumber);
-        saveState(oldVersion);
-    }
-
-    private void deleteAndSaveState(int positionToDelete) {
-        final List<ColorListElement> oldVersion = new ArrayList<>(colorsListRecyclerAdapter.getColorList());
-        colorsListRecyclerAdapter.deleteColorElement(positionToDelete);
-        saveState(oldVersion);
-    }
-
-    private void saveState(List<ColorListElement> oldVersion) {
-        if (savingDisposable != null && !savingDisposable.isDisposed()) {
-            savingDisposable.dispose();
-        }
-
-        savingDisposable = Single.fromCallable(() -> ColorListJsonLoader.writeJsonInFile(getFilesDir(), colorsListRecyclerAdapter.getColorList()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .timeout(2, TimeUnit.SECONDS)
-                .subscribe(v -> {
-                            if (!v) colorsListRecyclerAdapter.fillElementsListWithData(oldVersion);
-                        },
-                        v -> {
-                            colorsListRecyclerAdapter.fillElementsListWithData(oldVersion);
-                            Toast.makeText(this, getString(R.string.saving_colored_list_error_toast), Toast.LENGTH_SHORT).show();
-                            Log.e(Constants.SAVING_COLOR_LIST_FILE_ERROR_TAG, v.toString());
-                        });
-    }
-
-    private Disposable loadState() {  // fills empty list with saved elements
-        return Single.fromCallable(() -> ColorListJsonLoader.readJsonFromFile(getFilesDir()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .timeout(2, TimeUnit.SECONDS)
-                .subscribe(v -> {
-                            colorsListRecyclerAdapter.fillElementsListWithData(v);
-                            colorsListRecyclerAdapter.notifyDataSetChanged();
-                            fab.setVisibility(View.VISIBLE);
-                        },
-                        v -> {
-                            Toast.makeText(this, getString(R.string.loading_colored_list_error_toast), Toast.LENGTH_SHORT).show();
-                            Log.e(Constants.LOADING_COLOR_LIST_FILE_ERROR_TAG, v.toString());
-                            fab.setVisibility(View.VISIBLE);
-                        });
-    }
-
-    private void showDialogToDelete() {
-        if (dialogSelectedNumber == -1) {  // check if it is invoked by broadcastReceiver (-1 is start position)
-            // it is need to save name of element to show it after settings changes
-            // we can't take name from adapter by position if we call this method from onCreate
-            // reason: adapter data can be not ready
-            dialogSelectedNumber = colorsListRecyclerAdapter.getNumberByPosition(colorsListRecyclerAdapter.getSelectedPosition());
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.dialog_delete_question, dialogSelectedNumber));
-
-        builder.setPositiveButton(getString(R.string.dialog_yes_answer), (dialog, which) -> {
-            int selectedPosition = colorsListRecyclerAdapter.getSelectedPosition();
-            deleteAndSaveState(selectedPosition);
-            dialogSelectedNumber = -1;
-        });
-        builder.setNegativeButton(getString(R.string.dialog_no_answer), (dialog, which) -> {
-            colorsListRecyclerAdapter.unselectElement();
-            dialogSelectedNumber = -1;
-        });
-        builder.setOnDismissListener(dialog -> {
-            colorsListRecyclerAdapter.unselectElement();
-            dialogSelectedNumber = -1;
-        });
-
-        Dialog dialog = builder.create();
-        dialog.show();
     }
 
     @Override
@@ -180,15 +101,87 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        loadingDisposable.dispose();
-
+        if (loadingDisposable != null) loadingDisposable.dispose();
+        if (savingDisposable != null) savingDisposable.dispose();
         super.onDestroy();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         fab.setClickable(true);
+    }
+
+    private void addAndSaveState(int newListElementColor, int elementNumber) {
+        final List<ColorListElement> oldVersion = new ArrayList<>(colorsListRecyclerAdapter.getColorList());
+        colorsListRecyclerAdapter.addColorElement(newListElementColor, elementNumber);
+        saveState(colorsListRecyclerAdapter.getColorList(), oldVersion);
+    }
+
+    private void deleteAndSaveState(int positionToDelete) {
+        final List<ColorListElement> oldVersion = new ArrayList<>(colorsListRecyclerAdapter.getColorList());
+        colorsListRecyclerAdapter.deleteColorElement(positionToDelete);
+        saveState(colorsListRecyclerAdapter.getColorList(), oldVersion);
+    }
+
+    private void saveState(List<ColorListElement> newVersion, List<ColorListElement> oldVersion) {
+        if (savingDisposable != null && !savingDisposable.isDisposed()) {
+            savingDisposable.dispose();
+        }
+        savingDisposable = Single.fromCallable(() -> ColorListJsonLoader.writeJsonInFile(getFilesDir(), newVersion))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isSaved -> {
+                            if (!isSaved) {
+                                //  if IOException was occurred
+                                colorsListRecyclerAdapter.setColorElements(oldVersion);
+                            }
+                        },
+                        exception -> {
+                            Toast.makeText(this, getString(R.string.saving_colored_list_error_toast), Toast.LENGTH_SHORT).show();
+                            Log.e(SAVING_COLOR_LIST_FILE_ERROR_TAG, exception.toString());
+                        });
+    }
+
+    private Disposable loadState() {  // fills empty list with saved elements
+        return Single.fromCallable(() -> ColorListJsonLoader.readJsonFromFile(getFilesDir()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .timeout(2, TimeUnit.SECONDS)
+                .subscribe(loadedColorList -> {
+                            colorsListRecyclerAdapter.setColorElements(loadedColorList);
+                            colorsListRecyclerAdapter.notifyDataSetChanged();
+                            fab.setVisibility(View.VISIBLE);
+                            if (dialogSelectedNumber != -1) {  // need to call dialog if it was closed by settings change
+                                showDialogToDelete();
+                            }
+                        },
+                        exception -> {
+                            Toast.makeText(this, getString(R.string.loading_colored_list_error_toast), Toast.LENGTH_SHORT).show();
+                            Log.e(Constants.LOADING_COLOR_LIST_FILE_ERROR_TAG, exception.toString());
+                            fab.setVisibility(View.VISIBLE);
+                        });
+    }
+
+    private void showDialogToDelete() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.dialog_delete_question, dialogSelectedNumber));
+
+        builder.setPositiveButton(getString(R.string.dialog_yes_answer), (dialog, which) -> {
+            int selectedPosition = colorsListRecyclerAdapter.getSelectedPosition();
+            deleteAndSaveState(selectedPosition);
+            dialogSelectedNumber = -1;
+        });
+        builder.setNegativeButton(getString(R.string.dialog_no_answer), (dialog, which) -> {
+            colorsListRecyclerAdapter.unselectElement();
+            dialogSelectedNumber = -1;
+        });
+        builder.setOnDismissListener(dialog -> {
+            colorsListRecyclerAdapter.unselectElement();
+            dialogSelectedNumber = -1;
+        });
+
+        Dialog dialog = builder.create();
+        dialog.show();
     }
 }
