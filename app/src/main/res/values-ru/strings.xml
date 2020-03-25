@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Цвета</string>
+    <string name="list_item_text_pattern">Элемент %d</string>
+    <string name="fab_snackbar_message_text_pattern">Вы нажали Элемент %d</string>
+</resources>

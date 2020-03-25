@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="red">#FF0000</color>
+    <color name="orange">#FF7F00</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="green">#00FF00</color>
+    <color name="blue">#00FFFF</color>
+    <color name="navy_blue">#0000FF</color>
+    <color name="lilac">#4B0082</color>
+    <color name="transparent">#00000000</color>
+    <color name="persian_blue">#6600FF</color>
+    <color name="navy_persian_blue">#5200CC</color>
+    <color name="ic_nyan_cat_background">#232B6C</color>
 </resources>

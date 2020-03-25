@@ -1,5 +1,17 @@
 *.iml
-.gradle
+*.apk
+*.aar
+*.ap_
+*.aab
+*.class
+*.dex
+misc.xml
+vcs.xml
+bin/
+gen/
+out/
+.gradle/
+build/
 /local.properties
 /.idea/caches
 /.idea/libraries
@@ -8,7 +20,7 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
-/build
 /captures
 .externalNativeBuild
 .cxx
+

@@ -1,11 +1,8 @@
 <resources>
-
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/persian_blue</item>
+        <item name="colorPrimaryDark">@color/navy_persian_blue</item>
+        <item name="colorAccent">@color/persian_blue</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -15,6 +12,40 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/design_default_color_primary</item>
+    </style>
 
+    <style name="SplashTheme.TextView">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ColorList">
+        <item name="android:paddingStart">@dimen/color_list_horizontal_padding</item>
+        <item name="android:paddingEnd">@dimen/color_list_horizontal_padding</item>
+        <item name="android:paddingTop">@dimen/color_list_vertical_padding</item>
+        <item name="android:paddingBottom">@dimen/color_list_vertical_padding</item>
+        <item name="android:background">@drawable/color_list_item_background_states</item>
+    </style>
+
+    <style name="ColorListTextView">
+        <item name="android:textColor">@color/list_item_text_states</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+
+    <style name="ColorListCircle">
+        <item name="android:background">@drawable/color_list_circle_item_shape</item>
+    </style>
+
+    <style name="MainActivityToolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="MainActivityFab">
+        <item name="android:layout_gravity">bottom|end</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="android:tint">@android:color/white</item>
+    </style>
 </resources>

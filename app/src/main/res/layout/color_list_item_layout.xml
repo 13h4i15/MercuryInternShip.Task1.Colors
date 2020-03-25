@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/colors_list_item_body"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/ColorList">
+    <TextView
+        android:id="@+id/colors_list_item_text"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/ColorListTextView"
+        android:duplicateParentState="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <ImageView
+        android:id="@+id/colors_list_item_circle"
+        android:layout_height="@dimen/color_list_circle_size"
+        android:layout_width="@dimen/color_list_circle_size"
+        style="@style/ColorListCircle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+</androidx.constraintlayout.widget.ConstraintLayout>
