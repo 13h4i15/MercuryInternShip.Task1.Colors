@@ -64,7 +64,7 @@ public class ColorElemCreateActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putInt(SELECTED_RADIO_POSITION, radioGroup.getCheckedRadioButtonId());
         super.onSaveInstanceState(outState);
+        outState.putInt(SELECTED_RADIO_POSITION, radioGroup.getCheckedRadioButtonId());
     }
 }

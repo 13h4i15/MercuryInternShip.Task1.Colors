@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(v -> {
             fab.setClickable(false);  // with this you can't make multy-click
             Intent createElementIntent = new Intent(this, ColorElemCreateActivity.class);
-            createElementIntent.putExtra(Constants.NUMBER_INDEX_EXTRA, colorsListRecyclerAdapter.getNumberForNewElement());
+            createElementIntent.putExtra(Constants.NUMBER_INDEX_EXTRA, getNumberForNewElement());
             startActivityForResult(createElementIntent, ADD_ELEMENT_REQUEST_CODE);
         });
     }
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == ADD_ELEMENT_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 int newListElementColor = data.getIntExtra(Constants.SELECTED_COLOR_EXTRA, ColorListElement.ElementColorState.values().length - 1);
-                int elementNumber = data.getIntExtra(Constants.CREATED_ELEMENT_NUMBER_EXTRA, colorsListRecyclerAdapter.getNumberForNewElement());
+                int elementNumber = data.getIntExtra(Constants.CREATED_ELEMENT_NUMBER_EXTRA, getNumberForNewElement());
                 addAndSaveState(newListElementColor, elementNumber);
             }
         }
@@ -104,9 +104,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
         outState.putInt(POSITION_INDEX, colorsListRecyclerAdapter.getSelectedPosition());
         outState.putBoolean(DIALOG_VISIBLE, isDialogVisible);
-        super.onSaveInstanceState(outState);
+    }
+
+    public int getNumberForNewElement() {  // returns new name's number for new element
+        int lastElementNumber = colorsListRecyclerAdapter.getNumberByPosition(colorsListRecyclerAdapter.getItemCount() - 1);
+        return colorsListRecyclerAdapter.getItemCount() != 0 && lastElementNumber != -1 ? lastElementNumber + 1 : 0;
     }
 
     private void addAndSaveState(int newListElementColor, int elementNumber) {
@@ -171,18 +176,14 @@ public class MainActivity extends AppCompatActivity {
             deleteAndSaveState(colorsListRecyclerAdapter.getSelectedPosition());
             isDialogVisible = false;
         });
-        builder.setNegativeButton(getString(R.string.dialog_no_answer), (dialog, which) -> {
-            unselectAndDeleteElement();
-        });
-        builder.setOnDismissListener(dialog -> {
-            unselectAndDeleteElement();
-        });
+        builder.setNegativeButton(getString(R.string.dialog_no_answer), (dialog, which) -> unselectElementAndMakeDialogUnvisible());
+        builder.setOnDismissListener(dialog -> unselectElementAndMakeDialogUnvisible());
 
         Dialog dialog = builder.create();
         dialog.show();
     }
 
-    private void unselectAndDeleteElement() {
+    private void unselectElementAndMakeDialogUnvisible() {
         colorsListRecyclerAdapter.unselectElement();
         isDialogVisible = false;
     }

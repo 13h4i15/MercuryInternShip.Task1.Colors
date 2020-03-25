@@ -94,11 +94,11 @@ final class ColorsListRecyclerAdapter extends RecyclerView.Adapter<ColorsListRec
     }
 
     public int getNumberByPosition(int position) {
-        return colorList.get(position).getNumber();
-    }
-
-    public int getNumberForNewElement() {  // returns new name's number for new element
-        return getItemCount() != 0 ? getNumberByPosition(colorList.size() - 1) + 1 : 0;  // returns 0 number if list is empty
+        try {
+            return colorList.get(position).getNumber();
+        } catch (IndexOutOfBoundsException e) {
+            return -1;
+        }
     }
 
     public int getSelectedPosition() {
