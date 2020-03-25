@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.colors_list_recycler);
         fab = findViewById(R.id.fab);
 
-        int selectedPosition = -1;
         isDialogVisible = false;
+        int selectedPosition = -1;
         if (savedInstanceState != null) {
             selectedPosition = savedInstanceState.getInt(POSITION_INDEX);
             isDialogVisible = savedInstanceState.getBoolean(DIALOG_VISIBLE);
