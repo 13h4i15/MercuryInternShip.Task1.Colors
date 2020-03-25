@@ -10,7 +10,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/design_default_color_primary</item>
@@ -18,7 +20,7 @@
 
     <style name="SplashTheme.TextView">
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@android:color/primary_text_dark</item>
     </style>
 
     <style name="ColorList">
@@ -26,26 +28,27 @@
         <item name="android:paddingEnd">@dimen/color_list_horizontal_padding</item>
         <item name="android:paddingTop">@dimen/color_list_vertical_padding</item>
         <item name="android:paddingBottom">@dimen/color_list_vertical_padding</item>
-        <item name="android:background">@drawable/color_list_item_background_states</item>
+        <item name="android:background">@drawable/color_list_element_background_states</item>
     </style>
 
     <style name="ColorListTextView">
-        <item name="android:textColor">@color/list_item_text_states</item>
+        <item name="android:textColor">@color/list_element_text_states</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 
 
     <style name="ColorListCircle">
-        <item name="android:background">@drawable/color_list_circle_item_shape</item>
-    </style>
-
-    <style name="MainActivityToolbar">
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">@drawable/color_list_circle_element_shape</item>
     </style>
 
     <style name="MainActivityFab">
         <item name="android:layout_gravity">bottom|end</item>
         <item name="android:layout_margin">@dimen/fab_margin</item>
         <item name="android:tint">@android:color/white</item>
+    </style>
+
+    <style name="AddColoredElementButton">
+        <item name="android:background">@color/design_default_color_primary</item>
+        <item name="android:textColor">@android:color/primary_text_dark</item>
     </style>
 </resources>

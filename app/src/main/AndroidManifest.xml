@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_nyan_cat_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".ColorElemCreateActivity"/>
         <activity
             android:name=".SplashScreenActivity"
             android:theme="@style/SplashTheme">
@@ -20,7 +21,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name" />
     </application>
 
 </manifest>

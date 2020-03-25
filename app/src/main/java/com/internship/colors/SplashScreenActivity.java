@@ -32,17 +32,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-    private void startMainActivity() {
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
-        startActivity(mainActivityIntent);
-        finish();
-    }
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putLong(START_TIME_TAG, millisAtStart);
-
         super.onSaveInstanceState(outState);
+        outState.putLong(START_TIME_TAG, millisAtStart);
     }
 
 
@@ -68,5 +61,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         } else {
             startMainActivity();
         }
+    }
+
+    private void startMainActivity() {
+        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+        startActivity(mainActivityIntent);
+        finish();
     }
 }

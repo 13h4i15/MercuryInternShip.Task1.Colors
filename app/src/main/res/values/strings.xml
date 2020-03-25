@@ -2,4 +2,18 @@
     <string name="app_name">Colors</string>
     <string name="list_item_text_pattern">Item %d</string>
     <string name="fab_snackbar_message_text_pattern">You clicked Item %d</string>
+    <string name="dialog_delete_question">Are you sure, that you want to delete item %d?</string>
+    <string name="dialog_yes_answer">Yes</string>
+    <string name="dialog_no_answer">No</string>
+    <string name="add_colored_elem">Add</string>
+    <string name="red_color_name">Red</string>
+    <string name="orange_color_name">Orange</string>
+    <string name="yellow_color_name">Yellow</string>
+    <string name="green_color_name">Green</string>
+    <string name="blue_color_name">Blue</string>
+    <string name="navy_blue_color_name">Navy blue</string>
+    <string name="lilac_color_name">Lilac</string>
+    <string name="transparent_color_name">Transparent</string>
+    <string name="saving_colored_list_error_toast">Error occurred while saving list.</string>
+    <string name="loading_colored_list_error_toast">Error occurred while loading list.</string>
 </resources>
